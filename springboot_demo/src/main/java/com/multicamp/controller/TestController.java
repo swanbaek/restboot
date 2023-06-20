@@ -23,7 +23,7 @@ public class TestController {
         Map<String, Object> res = new HashMap<>();
         res.put("success", true);
         res.put("msg", "Hello SpringBoot & React");
-
+        logger.info("Test end");
         return res;
     }
 }
