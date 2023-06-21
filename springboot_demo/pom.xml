@@ -131,6 +131,12 @@
 			<artifactId>springfox-swagger2</artifactId>
 			<version>2.9.2</version>
 		</dependency>
+		<dependency>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-resources-plugin</artifactId>
+    <version>2.4.3</version>
+</dependency>
+		
 	</dependencies>
 
 	<build>
@@ -147,9 +153,7 @@
 					</excludes>
 				</configuration>
 			</plugin>
-			<!-- maven으로 npm build하기 위한 plugin 
-			참고: https://github.com/eirslett/frontend-maven-plugin
-			-->
+			<!-- maven으로 npm build하기 위한 plugin 참고: https://github.com/eirslett/frontend-maven-plugin -->
 			<plugin>
 				<groupId>com.github.eirslett</groupId>
 				<artifactId>frontend-maven-plugin</artifactId>
@@ -164,7 +168,7 @@
 						<goals>
 							<goal>install-node-and-npm</goal>
 						</goals>
-						<configuration> 
+						<configuration>
 							<nodeVersion>v16.14.0</nodeVersion>
 							<npmVersion>8.3.1</npmVersion>
 						</configuration>
@@ -189,6 +193,27 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!-- 아래 오류 발생하여 plugin 주석처리함
+			참고: https://velog.io/@postlist/Spring-Boot-React-%EA%B0%9C%EB%B0%9C%ED%99%98%EA%B2%BD-%EC%97%B0%EB%8F%99 -->
+			<!-- <plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				
+				<executions>
+					<execution>
+						<phase>generate-resources</phase>
+						<configuration>
+							<target>
+								<copy todir="${project.build.directory}/classes/public">
+									<fileset dir="${project.basedir}/myapp_react/build" />
+								</copy>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin> -->
 		</plugins>
 	</build>
 
