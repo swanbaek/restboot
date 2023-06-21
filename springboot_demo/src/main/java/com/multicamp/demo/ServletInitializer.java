@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
  * ServletInitializer는 web.xml을 없애주는 기능을 한다. 
  * 즉,spring boot프로젝트는 web.xml에 설정을 할 필요가 없는 것이다.
  * */
-@Component
+@Component 
 //@Slf4j
 public class ServletInitializer extends SpringBootServletInitializer {
 

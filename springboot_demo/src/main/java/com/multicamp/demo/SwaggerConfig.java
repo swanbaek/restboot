@@ -28,7 +28,7 @@ public class SwaggerConfig {
                 .apis(RequestHandlerSelectors.basePackage("com.multicamp"))
                 .paths(PathSelectors.ant("/**"))
                 .build();
-    }
+    } 
 
     private Set<String> getConsumeContentTypes() {
         Set<String> consumes = new HashSet<>();
