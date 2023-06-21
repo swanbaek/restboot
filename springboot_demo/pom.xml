@@ -195,7 +195,7 @@
 			</plugin>
 			<!-- 아래 오류 발생하여 plugin 주석처리함
 			참고: https://velog.io/@postlist/Spring-Boot-React-%EA%B0%9C%EB%B0%9C%ED%99%98%EA%B2%BD-%EC%97%B0%EB%8F%99 -->
-			<!-- <plugin>
+			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
 				
 				<executions>
@@ -213,7 +213,7 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin> -->
+			</plugin>
 		</plugins>
 	</build>
 
