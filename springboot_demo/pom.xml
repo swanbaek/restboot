@@ -193,8 +193,8 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- 아래 오류 발생하여 plugin 주석처리함
-			참고: https://velog.io/@postlist/Spring-Boot-React-%EA%B0%9C%EB%B0%9C%ED%99%98%EA%B2%BD-%EC%97%B0%EB%8F%99 -->
+			<!-- 아래 오류 발생하여 plugin 주석처리함=> 오류가 나도  mvn clean install하면 잘 실행되므로 주석처리 할 필요가 없음 주석 다시 해제함
+			 -->
 			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
 				
@@ -218,3 +218,4 @@
 	</build>
 
 </project>
+<!-- 참고: https://velog.io/@postlist/Spring-Boot-React-%EA%B0%9C%EB%B0%9C%ED%99%98%EA%B2%BD-%EC%97%B0%EB%8F%99 -->
