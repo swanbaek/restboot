@@ -56,6 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		System.out.println("configure(): "+passwordEncoder());
 		auth.inMemoryAuthentication()
+			//일단 비밀번호를 암호화하지 않고 테스트하려면 {noop}을 앞에 붙여주고 테스트하자.  
 			.withUser("user1").password("{noop}tiger").roles("USER");
 			//.and()
 			//.withUser("admin").password(passwordEncoder().encode("1234")).roles("ADMIN");
