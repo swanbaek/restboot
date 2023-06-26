@@ -28,6 +28,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.permitAll().anyRequest() // 어떠한 URI로 접근하든지
 				.authenticated()// 인증이 필요함을 설정
 				.and().formLogin()// 폼 로그인 방식을 사용할 것임
+				.loginPage("/user/login") //커스텀 페이지로 로그인 페이지를 변경한다////////////
+				.loginProcessingUrl("/user/loginProc")
+				.usernameParameter("userid")
+				.passwordParameter("passwd")
 				.defaultSuccessUrl("/login/result", true)// 로그인 성공시 이동할 url
 																//HomeController에 매핑되어 있음
 				.permitAll().and().logout();// 로그아웃 처리함
