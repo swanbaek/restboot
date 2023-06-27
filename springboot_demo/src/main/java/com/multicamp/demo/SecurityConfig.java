@@ -14,7 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Bean
+	@Bean(name = "bCryptPasswordEncoder")
 	public PasswordEncoder getPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
@@ -24,7 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.cors().and().csrf().disable().authorizeRequests()
 				.antMatchers("/swagger-ui.html", "/swagger-resources/**", "/user/signup", "/user/login",
 						"/exception/**", "/common/**", "/v2/api-docs", "/configuration/**", "/swagger*/**",
-						"/webjars/**")
+						"/webjars/**","/js/**","/img/**") ///js와 /img도 추가해야 됨
 				.permitAll().anyRequest() // 어떠한 URI로 접근하든지
 				.authenticated()// 인증이 필요함을 설정
 				.and().formLogin()// 폼 로그인 방식을 사용할 것임
@@ -45,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 *  백엔드+프론트엔드 전부 처리하는 프로젝트) css나 이미지 파일 등의 경우 인증이 되지 않은 상태에서도 
 	 *  보여져야 하는 경우가 대부분입니다. 
 	 *  이 경우 별도로 WebSecurity 하나를 인자로 갖는 configure를 오버라이딩해서 
-	 *  예외 처리를 할 수 있습니다.
+	 *  예외 처리를 할 수 있습니다.=> 이게 적용이 안되는 느낌???
 	 * */
 	@Override
 	public void configure(WebSecurity web) throws Exception {

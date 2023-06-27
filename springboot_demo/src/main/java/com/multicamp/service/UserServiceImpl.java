@@ -3,23 +3,30 @@ package com.multicamp.service;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.inject.Inject;
 
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.multicamp.domain.PagingVO;
 import com.multicamp.domain.UserVO;
+import com.multicamp.mapper.UserMapper;
 
 @Service("userService")
 public class UserServiceImpl  implements UserService {
+	
+	@Resource(name="bCryptPasswordEncoder")
+	private PasswordEncoder passwordEncoder;
+	
+	@Inject
+	private UserMapper userMapper;
 
 	@Override
 	public int createUser(UserVO user) {
-		// TODO Auto-generated method stub
-		return 0;
+		String encodePasswd=passwordEncoder.encode(user.getPasswd());
+		user.setPasswd(encodePasswd);
+		
+		return userMapper.createUser(user);
 	}
 
 	@Override

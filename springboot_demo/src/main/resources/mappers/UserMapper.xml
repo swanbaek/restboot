@@ -11,8 +11,8 @@
 	 	</selectKey>
 	 	<!-- insert문 완성 -->
 	 	insert into member
-	 	values(#{idx},#{name},#{userid},#{pwd},#{hp1},#{hp2},#{hp3}
-	 	,#{post:VARCHAR},#{addr1:VARCHAR},#{addr2:VARCHAR},SYSDATE,1000,0)
+	 	values(#{idx},#{name},#{userid},#{passwd},#{role},#{hp1},#{hp2},#{hp3}
+	 	,#{post:VARCHAR},#{addr1:VARCHAR},#{addr2:VARCHAR},SYSDATE)
 	</insert>
 	
 	<select id="idCheck" resultType="int" parameterType="string">
