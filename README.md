@@ -1,6 +1,5 @@
 # restboot
 - Spring Boot
-- React
 - Swagger
 - Security
 ## 핵심 구현 내용
