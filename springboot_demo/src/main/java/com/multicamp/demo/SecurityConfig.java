@@ -35,8 +35,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.defaultSuccessUrl("/login/result", true)// 로그인 성공시 이동할 url																//HomeController에 매핑되어 있음
 				.permitAll()
 				.and()
-				.logout()// 로그아웃 처리함
-				.logoutUrl("/user/logout");
+				.logout();// 로그아웃 처리함 디폴트로 로그아웃시 url은  "/logout"로 잡혀있다.
+				//.logoutUrl("/user/logout");//다른 url로 설정하고 싶다면 왼쪽과 같이 설정한다.
 
 	}// --------------------------------
 	 
