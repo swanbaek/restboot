@@ -22,11 +22,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable().authorizeRequests()
-				.antMatchers("/swagger-ui.html", "/swagger-resources/**", "/user/signup", "/user/login",
+				.antMatchers("/index","/swagger-ui.html", "/swagger-resources/**", "/user/signup", "/user/login",
 						"/exception/**", "/common/**", "/v2/api-docs", "/configuration/**", "/swagger*/**",
-						"/webjars/**","/js/**","/img/**") ///js와 /img도 추가해야 됨
-				.permitAll().anyRequest() // 어떠한 URI로 접근하든지
-				.authenticated()// 인증이 필요함을 설정
+						"/webjars/**","/js/**","/img/**") ///js와 /img도 추가해야 됨				
+				.permitAll()
+				.antMatchers("/admin").hasAnyAuthority("ROLE_ADMIN")///관리자로만 "/admin" url패턴 접근 가능 
+				.anyRequest() // 어떠한 URI로 접근하든지
+				.authenticated()// 인증이 필요함을 설정				
 				.and().formLogin()// 폼 로그인 방식을 사용할 것임
 				.loginPage("/user/login") //커스텀 페이지로 로그인 페이지를 변경한다////////////
 				.loginProcessingUrl("/user/loginProc")
@@ -63,6 +65,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 사용자 정의 인증 처리를 구성할 수 있습니다. 아래 예제에서는 간단한 인메모리 인증을 설정했습니다. 
 실제 프로덕션 환경에서는 데이터베이스 기반의 사용자 인증 또는 LDAP, OAuth 등의 외부 인증을 사용할 수 있습니다.
 	 ******************************************************************************** */
+	/* ==> 이부분은 데이터베이스 기반의 사용자 인증으로 수정함
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		System.out.println("configure(): "+passwordEncoder());
@@ -72,6 +75,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			//.and()
 			//.withUser("admin").password(passwordEncoder().encode("1234")).roles("ADMIN");
 	}
-	
+	*/
 }
 //참조: https://github.com/nahwasa/spring-security-basic-project/tree/spring_boot_2.7.7
