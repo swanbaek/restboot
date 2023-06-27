@@ -30,8 +30,8 @@
 		.and().formLogin()// 폼 로그인 방식을 사용할 것임
 				.loginPage("/user/login") //커스텀 페이지로 로그인 페이지를 변경한다////////////
 				.loginProcessingUrl("/user/loginProc")
-				.usernameParameter("userid")
-				.passwordParameter("passwd")
+				.usernameParameter("userid")// input name을 userid로
+				.passwordParameter("passwd")// input name을 passwd로 변경한다
 			 -->
 			<table border="0" class="table">
 				<tr>

@@ -32,9 +32,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.loginProcessingUrl("/user/loginProc")
 				.usernameParameter("userid")
 				.passwordParameter("passwd")
-				.defaultSuccessUrl("/login/result", true)// 로그인 성공시 이동할 url
-																//HomeController에 매핑되어 있음
-				.permitAll().and().logout();// 로그아웃 처리함
+				.defaultSuccessUrl("/login/result", true)// 로그인 성공시 이동할 url																//HomeController에 매핑되어 있음
+				.permitAll()
+				.and()
+				.logout()// 로그아웃 처리함
+				.logoutUrl("/user/logout");
 
 	}// --------------------------------
 	 
@@ -72,3 +74,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 	
 }
+//참조: https://github.com/nahwasa/spring-security-basic-project/tree/spring_boot_2.7.7
