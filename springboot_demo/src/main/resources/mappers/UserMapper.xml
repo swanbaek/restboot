@@ -1,0 +1,31 @@
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.multicamp.mapper.UserMapper">
+<!-- [주의] UserMapper인터페이스의 "패키지명.인터페이스명" 를 namespace에 지정해야 함
+	각 element들의 id 값은 메서드명으로 지정해야 한다
+ -->
+ 	<insert id="createUser" parameterType="User">
+	 	<selectKey keyProperty="idx" resultType="_int" order="BEFORE">
+	 		select member_seq.nextval from dual
+	 	</selectKey>
+	 	<!-- insert문 완성 -->
+	 	insert into member
+	 	values(#{idx},#{name},#{userid},#{pwd},#{hp1},#{hp2},#{hp3}
+	 	,#{post:VARCHAR},#{addr1:VARCHAR},#{addr2:VARCHAR},SYSDATE,1000,0)
+	</insert>
+	
+	<select id="idCheck" resultType="int" parameterType="string">
+		select idx from member where userid=#{value}
+	</select>
+	<!--  
+		CREATE OR REPLACE VIEW memberView
+		AS
+		select member.*, 
+		decode(mstate,0,'일반회원',-1,'정지회원',-2,'탈퇴회원',9,'관리자') mstateStr from member
+		WHERE mstate>-2
+	-->
+	<select id="findUser" resultType="User" parameterType="User">
+		select * from memberView where userid=#{userid}
+	</select>
+</mapper>
