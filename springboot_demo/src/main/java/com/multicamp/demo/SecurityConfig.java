@@ -1,5 +1,7 @@
 package com.multicamp.demo;
 
+import javax.inject.Inject;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -10,14 +12,16 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.multicamp.service.LoginValidatorService;
+
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+	//회원 인증 서비스 객체 주입
+	@Inject
+	private LoginValidatorService loginValidatorService;
 
-	@Bean(name = "bCryptPasswordEncoder")
-	public PasswordEncoder getPasswordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+	
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -26,7 +30,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 						"/exception/**", "/common/**", "/v2/api-docs", "/configuration/**", "/swagger*/**",
 						"/webjars/**","/js/**","/img/**") ///js와 /img도 추가해야 됨				
 				.permitAll()
-				.antMatchers("/admin").hasAnyAuthority("ROLE_ADMIN")///관리자로만 "/admin" url패턴 접근 가능 
+				.antMatchers("/admin/**").hasRole("ADMIN")//.hasAnyAuthority("ROLE_ADMIN")//관리자로만 "/admin" url패턴 접근 가능 추가				
+				.antMatchers("/user/**").access("hasRole('ADMIN') or hasRole('USER')") //hasAnyAuthority("ROLE_USER")///관리자 또는 인증 회원들만 "/user" url패턴 접근 가능 추가				
 				.anyRequest() // 어떠한 URI로 접근하든지
 				.authenticated()// 인증이 필요함을 설정				
 				.and().formLogin()// 폼 로그인 방식을 사용할 것임
@@ -37,8 +42,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.defaultSuccessUrl("/login/result", true)// 로그인 성공시 이동할 url																//HomeController에 매핑되어 있음
 				.permitAll()
 				.and()
-				.logout();// 로그아웃 처리함 디폴트로 로그아웃시 url은  "/logout"로 잡혀있다.
+				.logout()// 로그아웃 처리함 디폴트로 로그아웃시 url은  "/logout"로 잡혀있다.
 				//.logoutUrl("/user/logout");//다른 url로 설정하고 싶다면 왼쪽과 같이 설정한다.
+				.and()
+				.exceptionHandling()
+				.accessDeniedPage("/accessDenied");
 
 	}// --------------------------------
 	 
@@ -56,25 +64,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				"/static/img/**", 
 				"/static/frontend/**");
 	}
-	@Bean
-	BCryptPasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+	
 	/*********************************************************************************
 - 사용자 정의 인증 처리 (Optional): configure(AuthenticationManagerBuilder auth) 메서드를 사용하여 
 사용자 정의 인증 처리를 구성할 수 있습니다. 아래 예제에서는 간단한 인메모리 인증을 설정했습니다. 
 실제 프로덕션 환경에서는 데이터베이스 기반의 사용자 인증 또는 LDAP, OAuth 등의 외부 인증을 사용할 수 있습니다.
 	 ******************************************************************************** */
-	/* ==> 이부분은 데이터베이스 기반의 사용자 인증으로 수정함
+	/* ==> 이부분은 데이터베이스 기반의 사용자 인증으로 수정함*/
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		System.out.println("configure(): "+passwordEncoder());
-		auth.inMemoryAuthentication()
+		//System.out.println("configure(): "+passwordEncoder()); //passwordEncoder는 LoginValidatorService로 옮김
+		auth.userDetailsService(loginValidatorService);
+			//auth.inMemoryAuthentication()
 			//일단 비밀번호를 암호화하지 않고 테스트하려면 {noop}을 앞에 붙여주고 테스트하자.  
-			.withUser("user1").password("{noop}tiger").roles("USER");
+			//.withUser("user1").password("{noop}tiger").roles("USER");
 			//.and()
 			//.withUser("admin").password(passwordEncoder().encode("1234")).roles("ADMIN");
 	}
-	*/
+	
 }
 //참조: https://github.com/nahwasa/spring-security-basic-project/tree/spring_boot_2.7.7

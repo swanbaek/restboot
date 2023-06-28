@@ -15,7 +15,7 @@ import com.multicamp.mapper.UserMapper;
 @Service("userService")
 public class UserServiceImpl  implements UserService {
 	
-	@Resource(name="bCryptPasswordEncoder")
+	@Inject
 	private PasswordEncoder passwordEncoder;
 	
 	@Inject
@@ -43,7 +43,9 @@ public class UserServiceImpl  implements UserService {
 
 	@Override
 	public boolean idCheck(String userid) {
-		// TODO Auto-generated method stub
+		Integer idx=userMapper.idCheck(userid);
+		System.out.println("idx: "+idx);
+		if(idx==null) return true;		
 		return false;
 	}
 

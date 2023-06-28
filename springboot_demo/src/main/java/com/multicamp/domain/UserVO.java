@@ -3,7 +3,7 @@ package com.multicamp.domain;
 import lombok.Data;
 
 @Data
-public class UserVO {
+public class UserVO  {
 	
 	private int idx;
 	private String name;

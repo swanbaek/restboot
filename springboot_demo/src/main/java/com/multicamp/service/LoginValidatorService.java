@@ -1,11 +1,15 @@
 package com.multicamp.service;
 
-import javax.annotation.Resource;
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +19,12 @@ import com.multicamp.mapper.UserMapper;
 @Service("loginValidatorService")
 public class LoginValidatorService implements UserDetailsService{
 
-	@Resource(name="bCryptPasswordEncoder")
-	private PasswordEncoder passwordEncoder;
+	Logger log =LoggerFactory.getLogger(getClass());
 	
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 	@Inject
 	private UserMapper userMapper;
 	
@@ -30,7 +37,13 @@ public class LoginValidatorService implements UserDetailsService{
 		if(user==null)
 			throw new UsernameNotFoundException(username+"란 회원은 없습니다");
 		String passwd=user.getPasswd();
+		String role=user.getRole();
+		log.info("role: "+role);
+		return User.builder()
+					.username(username)
+					.password(user.getPasswd())
+					.roles(role)
+					.build();
 		
-		return null;
 	}
 }
