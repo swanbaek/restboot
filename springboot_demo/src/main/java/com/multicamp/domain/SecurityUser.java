@@ -17,7 +17,8 @@ public class SecurityUser extends User{
 	Logger log=LoggerFactory.getLogger(getClass());
 	
 	public SecurityUser(UserVO member) {
-		super(member.getUserid(), member.getPasswd(), AuthorityUtils.createAuthorityList(member.getRole().toString()));
+		super(member.getUserid(), member.getPasswd(), 
+				AuthorityUtils.createAuthorityList(member.getRole().toString()));
 
         log.info("SecurityUser member.username = {}", member.getUserid());
         log.info("SecurityUser member.password = {}", member.getPasswd());

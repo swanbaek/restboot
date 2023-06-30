@@ -26,8 +26,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable().authorizeRequests()
-				.antMatchers("/index","/swagger-ui.html", "/swagger-resources/**", "/user/signup", "/user/login",
-						"/exception/**", "/common/**", "/v2/api-docs", "/configuration/**", "/swagger*/**",
+				.antMatchers("/index","/swagger-ui.html", "/swagger-resources/**", 
+						"/user/signup", "/user/login",
+						"/exception/**", "/common/**", 
+						"/v2/api-docs", "/configuration/**", "/swagger*/**",
 						"/webjars/**","/js/**","/img/**") ///js와 /img도 추가해야 됨				
 				.permitAll()
 				.antMatchers("/admin/**").hasRole("ADMIN")//.hasAnyAuthority("ROLE_ADMIN")//관리자로만 "/admin" url패턴 접근 가능 추가				
@@ -42,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.defaultSuccessUrl("/login/result", true)// 로그인 성공시 이동할 url																//HomeController에 매핑되어 있음
 				.permitAll()
 				.and()
-				.logout()// 로그아웃 처리함 디폴트로 로그아웃시 url은  "/logout"로 잡혀있다.
+				.logout().logoutSuccessUrl("/index")// 로그아웃 처리함 디폴트로 로그아웃시 url은  "/logout"로 잡혀있다.
 				//.logoutUrl("/user/logout");//다른 url로 설정하고 싶다면 왼쪽과 같이 설정한다.
 				.and()
 				.exceptionHandling()
