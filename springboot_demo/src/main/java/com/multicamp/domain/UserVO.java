@@ -1,9 +1,17 @@
 package com.multicamp.domain;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+
 import lombok.Data;
 
 @Data
-public class UserVO  {
+public class UserVO  
+{
 	
 	private int idx;
 	private String name;
@@ -20,5 +28,7 @@ public class UserVO  {
 	private String addr2;
 	
 	private java.sql.Date indate;
+	
+	
 	
 }///////////////////////////////////

@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.multicamp.domain.SecurityUser;
 import com.multicamp.domain.UserVO;
 import com.multicamp.mapper.UserMapper;
 
@@ -39,11 +40,14 @@ public class LoginValidatorService implements UserDetailsService{
 		String passwd=user.getPasswd();
 		String role=user.getRole();
 		log.info("role: "+role);
-		return User.builder()
+		/*
+		return User.builder() ====>User를 커스텀하여 SecurityUser로 구현함
 					.username(username)
 					.password(user.getPasswd())
 					.roles(role)
 					.build();
+					*/
 		
+		return new SecurityUser(user);
 	}
 }
