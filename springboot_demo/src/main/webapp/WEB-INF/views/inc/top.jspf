@@ -65,6 +65,12 @@
 			</sec:authorize>
 			<!-- 로그인한 사용자들인 경우는 로그아웃 보여주기 -->
 			<sec:authorize access="isAuthenticated()">
+			<!--로그인한 사람 아이디 출력  -->
+			<li class="nav-item bg-primary">
+			<a class="nav-link  text-white" >
+				<sec:authentication property="principal.username"/>님 로그인 중
+			</a>
+			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="/logout">Logout</a>
 			</li>
