@@ -41,13 +41,13 @@ public class LoginValidatorService implements UserDetailsService{
 		String role=user.getRole();
 		log.info("role: "+role);
 		/*
-		return User.builder() ====>User를 커스텀하여 SecurityUser로 구현함
+		return User.builder() //====>User를 커스텀하여 SecurityUser로 구현함
 					.username(username)
 					.password(user.getPasswd())
 					.roles(role)
 					.build();
-					*/
 		
+		*/
 		return new SecurityUser(user);
 	}
 }

@@ -18,7 +18,9 @@ public class SecurityUser extends User{
 	
 	public SecurityUser(UserVO member) {
 		super(member.getUserid(), member.getPasswd(), 
-				AuthorityUtils.createAuthorityList(member.getRole().toString()));
+				AuthorityUtils.createAuthorityList("ROLE_"+member.getRole().toString()));
+		//User를 커스텀화(=>SecurityUser로 사용자정의 클래스를 작성함) 해서 구현할 경우
+		//role이름앞에 "ROLE_"를 붙여줘야 각 url패턴별로 사용자 접근 제어가 가능함에 유의하자
 		log.info(""+AuthorityUtils.createAuthorityList(member.getRole().toString()));
         log.info("SecurityUser member.username = {}", member.getUserid());
         log.info("SecurityUser member.password = {}", member.getPasswd());
