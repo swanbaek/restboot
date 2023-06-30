@@ -33,7 +33,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 						"/webjars/**","/js/**","/img/**") ///js와 /img도 추가해야 됨				
 				.permitAll()
 				.antMatchers("/admin/**").hasRole("ADMIN")//.hasAnyAuthority("ROLE_ADMIN")//관리자로만 "/admin" url패턴 접근 가능 추가				
-				.antMatchers("/user/**").access("hasRole('ADMIN') or hasRole('USER')") //hasAnyAuthority("ROLE_USER")///관리자 또는 인증 회원들만 "/user" url패턴 접근 가능 추가				
+				.antMatchers("/user/**").hasAnyRole("ADMIN","USER")
+				//.access("hasRole('ADMIN') or hasRole('USER')") //hasAnyAuthority("ROLE_USER")///관리자 또는 인증 회원들만 "/user" url패턴 접근 가능 추가				
 				.anyRequest() // 어떠한 URI로 접근하든지
 				.authenticated()// 인증이 필요함을 설정				
 				.and().formLogin()// 폼 로그인 방식을 사용할 것임

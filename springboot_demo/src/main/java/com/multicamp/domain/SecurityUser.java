@@ -19,7 +19,7 @@ public class SecurityUser extends User{
 	public SecurityUser(UserVO member) {
 		super(member.getUserid(), member.getPasswd(), 
 				AuthorityUtils.createAuthorityList(member.getRole().toString()));
-
+		log.info(""+AuthorityUtils.createAuthorityList(member.getRole().toString()));
         log.info("SecurityUser member.username = {}", member.getUserid());
         log.info("SecurityUser member.password = {}", member.getPasswd());
         log.info("SecurityUser member.role = {}", member.getRole().toString());
