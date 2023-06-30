@@ -21,6 +21,9 @@ public class SecurityUser extends User{
 				AuthorityUtils.createAuthorityList("ROLE_"+member.getRole().toString()));
 		//User를 커스텀화(=>SecurityUser로 사용자정의 클래스를 작성함) 해서 구현할 경우
 		//role이름앞에 "ROLE_"를 붙여줘야 각 url패턴별로 사용자 접근 제어가 가능함에 유의하자
+		//Authority의 경우는 "ROLE_USER","ROLE_ADMIN"식의 값이 들어간다.  
+		//User의 빌더로 생성할 경우는 role이름만 넣어줘도 자동으로 authority에 ROLE_롤네임을 붙여주는데 
+		//커스텀하여 우리가 만들 경우는 이것을 붙여줘야 제대로 동작하더라...
 		log.info(""+AuthorityUtils.createAuthorityList(member.getRole().toString()));
         log.info("SecurityUser member.username = {}", member.getUserid());
         log.info("SecurityUser member.password = {}", member.getPasswd());
