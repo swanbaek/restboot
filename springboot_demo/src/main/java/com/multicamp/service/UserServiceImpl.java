@@ -67,6 +67,11 @@ public class UserServiceImpl  implements UserService {
 		return null;
 	}
 
+	@Override
+	public UserVO findUser(UserVO user) {
+		return userMapper.findUser(user);
+	}
+
 	
 
 }

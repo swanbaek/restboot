@@ -1,9 +1,12 @@
 package com.multicamp.controller;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,5 +59,18 @@ public class UserController {
 		m.addAttribute("userid",userid);
 		
 		return "member/idCheckResult";
+	}
+	
+	@GetMapping("/myPage")
+	public String showMyPage(Authentication auth, Model model) {
+		UserDetails userDetails=(UserDetails) auth.getPrincipal();
+		log.info("userDetails={}",userDetails);
+		/* 이부분은 필요 없음. security taglib를 이용하여 principal로 jsp에서 접근하면 된다.
+		 * String userid=userDetails.getUsername(); UserVO tmp=new UserVO();
+		 * tmp.setUserid(userid); UserVO user=userService.findUser(tmp);
+		 * model.addAttribute("loginUser", user);
+		 */
+		
+		return "member/myPage";
 	}
 }

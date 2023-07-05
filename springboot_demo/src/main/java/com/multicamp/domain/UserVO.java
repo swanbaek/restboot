@@ -29,6 +29,12 @@ public class UserVO
 	
 	private java.sql.Date indate;
 	
+	public String getAllHp() {
+		return hp1+"-"+hp2+"-"+hp3;
+	}
+	public String getAllAddr() {
+		return "["+post+"] "+addr1+" "+addr2;
+	}
 	
 	
 }///////////////////////////////////

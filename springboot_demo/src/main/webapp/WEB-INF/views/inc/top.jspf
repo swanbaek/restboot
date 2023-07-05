@@ -82,10 +82,7 @@
 					data-toggle="dropdown"> Auth Page </a>
 					<div class="dropdown-menu">
 						<a class="dropdown-item" href="${myctx}/user/userMain">User Page</a> 
-						
 						<a class="dropdown-item" href="${myctx}/admin/adminMain">AdminPage</a>
-						<a class="dropdown-item" href="${myctx}/admin/prodList">AdminPage[목록]</a>
-						
 						<a class="dropdown-item" href="${myctx}/user/myPage">MyPage</a>
 					</div></li>
 			</ul>

@@ -20,4 +20,6 @@ public interface UserService {
 	int updateUser(UserVO user);
 
 	UserVO getUser(Integer midx);
+	
+	UserVO findUser(UserVO user);
 }
