@@ -5,7 +5,10 @@
 <script type="text/javascript" src="/js/userCheck.js"></script>
 <!-- ------------------------------------------ -->
 <div class="container">
-	<h1 class="text-center mb-3"><img src="/img/signup.png"></h1>
+	<h1 class="text-center text-secondary mb-3">
+	Signup
+	<!-- <img src="/img/signup.png"> -->
+	</h1>
 	<form name="mf" action="signup" method="post">
 	<!-- ---일반회원: role(USER), 관리자(ADMIN)------------------------------- -->
 	<input type="hidden" name="role" value="USER">

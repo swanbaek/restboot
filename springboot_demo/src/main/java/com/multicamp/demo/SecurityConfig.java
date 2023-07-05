@@ -27,7 +27,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable().authorizeRequests()
 				.antMatchers("/index","/swagger-ui.html", "/swagger-resources/**", 
-						"/user/signup", "/user/login",
+						"/user/signup","/user/idCheck", "/user/login",
 						"/exception/**", "/common/**", 
 						"/v2/api-docs", "/configuration/**", "/swagger*/**",
 						"/webjars/**","/js/**","/img/**") ///js와 /img도 추가해야 됨				
