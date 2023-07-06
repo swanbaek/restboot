@@ -17,19 +17,19 @@
 
 <br><br>
 ## 3. 인증이 필요한 페이지 메뉴
-<br>
+
 ![image](https://github.com/swanbaek/restboot/assets/20180958/617059a4-4c65-4164-ab72-5219d0b1022b)
 
 <br><br>
 
 ### [1] 일반 USER가 각 페이지에 들어갈 경우
-<br>
+
 - ![image](https://github.com/swanbaek/restboot/assets/20180958/025c11e3-badb-48e3-96c1-0f8a0715ab30)
 
 <br><br>
 
 ### [2] 관리자 ADMIN이 각 페이지에 들어갈 경우
-<br>
+
 ![image](https://github.com/swanbaek/restboot/assets/20180958/494352e9-e303-42b5-a813-0ba8d0a0f87a)
 <br>
 ![image](https://github.com/swanbaek/restboot/assets/20180958/36ec4e63-75b3-422a-b49e-8001d1d2e0b1)
@@ -37,7 +37,7 @@
 <br><br>
 
 ### [3] MyPage 에 들어갈 경우 - 인증이 필요한 페이지
-<br>
+
 ![image](https://github.com/swanbaek/restboot/assets/20180958/f099e47f-378a-4016-bf36-e150ea98d71f)
 
 <br><br>
