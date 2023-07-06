@@ -33,5 +33,12 @@
 
 
 
+### [3] MyPage 에 들어갈 경우 - 인증이 필요한 페이지
+
+![image](https://github.com/swanbaek/restboot/assets/20180958/f099e47f-378a-4016-bf36-e150ea98d71f)
+
+
+
+
 
 
