@@ -1,5 +1,7 @@
 package com.multicamp.controller;
 
+import javax.annotation.Resource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ui.ModelMap;
@@ -16,10 +18,12 @@ import lombok.RequiredArgsConstructor;
 
 @RequestMapping("/api")
 @RestController
-@RequiredArgsConstructor
+
 public class UserReactController {
 	Logger log=LoggerFactory.getLogger(getClass());
-	private final UserService userService;
+	
+	@Resource(name="reactUserService")
+	private UserService userService;
 	
 	/*리액트와 연동 처리 위해 SecurityConfig에 "/api/**" 패턴에 대한 허용(permitAll())추가해야 함*/
 	//@CrossOrigin("*")
