@@ -2,17 +2,28 @@ package com.multicamp.service;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.multicamp.domain.PagingVO;
-import com.multicamp.domain.UserVO;
-@Service("reactUserService")
-public class ReactUserServiceImpl implements UserService {
+import com.multicamp.domain.ReactUserVO;
+import com.multicamp.mapper.ReactUserMapper;
 
+import lombok.RequiredArgsConstructor;
+@Service("reactUserService")
+@RequiredArgsConstructor
+public class ReactUserServiceImpl implements ReactUserService {
+
+	private final ReactUserMapper userMapper;
+	
+	@Inject
+	private BCryptPasswordEncoder passwordEncoder;
 	@Override
-	public int createUser(UserVO user) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int createUser(ReactUserVO user) {
+		user.setPwd(passwordEncoder.encode(user.getPwd()));
+		return userMapper.createUser(user);
 	}
 
 	@Override
@@ -22,13 +33,13 @@ public class ReactUserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<UserVO> listUser(PagingVO pvo) {
+	public List<ReactUserVO> listUser(PagingVO pvo) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean idCheck(String userid) {
+	public boolean nickCheck(String nickname) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -40,19 +51,19 @@ public class ReactUserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int updateUser(UserVO user) {
+	public int updateUser(ReactUserVO user) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public UserVO getUser(Integer midx) {
+	public ReactUserVO getUser(Integer midx) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public UserVO findUser(UserVO user) {
+	public ReactUserVO findUser(ReactUserVO user) {
 		// TODO Auto-generated method stub
 		return null;
 	}
