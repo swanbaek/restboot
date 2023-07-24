@@ -9,8 +9,10 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -65,5 +67,15 @@ public class PostReactController {
 		map.put("result", str);
 		return map;
 	}
+	
+	@DeleteMapping(value="/postDelete/{id}", produces="application/json")
+	public ModelMap updatePost(@PathVariable("id") int id) {
+		int n=this.postService.deletePost(id);
+		ModelMap map=new ModelMap();
+		String str=(n>0)?"ok":"fail";
+		map.put("result", str);
+		return map;
+	}
+	
 
 } 

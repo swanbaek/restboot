@@ -25,4 +25,7 @@
 			id=#{id}
 		</where>	
 	</update>
+	<delete id="deletePost" parameterType="_int">
+		delete from react_post where id=#{value}
+	</delete>
 </mapper>
