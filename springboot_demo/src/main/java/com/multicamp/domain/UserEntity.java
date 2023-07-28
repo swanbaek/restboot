@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(uniqueConstraints= {@UniqueConstraint(columnNames = "nickname")})
+@Table(name="REACT_MEMBER",uniqueConstraints= {@UniqueConstraint(columnNames = "nickname")})
 @SequenceGenerator(name="REACT_MEMBER_SEQ_GEN",//시퀀스 제너레이터 이름
 sequenceName = "REACT_MEMBER_SEQ", //시퀀스명
 initialValue = 1, //시작값
@@ -31,7 +31,7 @@ public class UserEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "REACT_MEMBER_SEQ_GEN")
-	private String idx;
+	private Long idx;//Long타입으로 수정
 	@Column(nullable = false)
 	private String name;
 	@Column(nullable = false)

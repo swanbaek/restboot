@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ReactUserVO {
 	private String token;//token추가
-	private String idx;//int=>String으로 변경
+	private Long idx;//int=>Long으로 변경
 	private String name;
 	private String nickname;
 	private String pwd;
