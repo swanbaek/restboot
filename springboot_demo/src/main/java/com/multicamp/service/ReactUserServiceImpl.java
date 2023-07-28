@@ -18,6 +18,8 @@ public class ReactUserServiceImpl implements ReactUserService {
 
 	private final ReactUserMapper userMapper;
 	
+
+	
 	@Inject
 	private BCryptPasswordEncoder passwordEncoder;
 	@Override

@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.multicamp.domain.ReactUserVO;
 import com.multicamp.service.ReactUserService;
 
-@RequestMapping("/api")
+//@RequestMapping("/api") ===>주석 처리 UserReactJapController에서 사용 예정
 @RestController
 public class UserReactController {
 	Logger log=LoggerFactory.getLogger(getClass());

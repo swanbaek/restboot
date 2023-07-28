@@ -2,7 +2,10 @@ package com.multicamp.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -20,9 +23,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Table(uniqueConstraints= {@UniqueConstraint(columnNames = "nickname")})
+@SequenceGenerator(name="REACT_MEMBER_SEQ_GEN",//시퀀스 제너레이터 이름
+sequenceName = "REACT_MEMBER_SEQ", //시퀀스명
+initialValue = 1, //시작값
+allocationSize = 1)//메모리 통해 할당할 범위 사이즈
 public class UserEntity {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "REACT_MEMBER_SEQ_GEN")
 	private String idx;
 	@Column(nullable = false)
 	private String name;
