@@ -11,9 +11,18 @@
 	 	insert into react_post
 	 	values(#{id},#{name},#{content},#{filename:VARCHAR},SYSDATE)	 	
 	</insert>
-	
+	<select id="getPostCount" resultType="_int">
+		select count(id) from react_post
+	</select>
 	<select id="listPosts" resultType="Post" parameterType="Page">
-		select * from react_post order by id desc
+		select * from(
+		select p.*, row_number() over(order by id desc) rn from react_post p
+		)
+		<where>
+			<![CDATA[
+			rn > #{start} and rn < #{end}
+			]]>
+		</where>
 	</select>
 	
 	<update id="updatePost" parameterType="Post">

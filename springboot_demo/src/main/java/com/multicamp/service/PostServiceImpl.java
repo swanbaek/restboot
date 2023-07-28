@@ -24,7 +24,7 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public int getPostCount(PagingVO page) {
 		// TODO Auto-generated method stub
-		return 0;
+		return postMapper.getPostCount(page);
 	}
 
 	@Override

@@ -2,7 +2,9 @@ package com.multicamp.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
@@ -32,7 +34,7 @@ public class PostReactController {
 	public ModelMap postCreate(@ModelAttribute PostVO vo,HttpSession ses) {
 		ServletContext ctx=ses.getServletContext();
 		String upDir=ctx.getRealPath("/upload");
-		System.out.println("vo=="+vo+", upDir: "+upDir+"mfilename: "+vo.getMfilename());
+		//System.out.println("vo=="+vo+", upDir: "+upDir+"mfilename: "+vo.getMfilename());
 		MultipartFile mfile=vo.getMfilename();
 		if(mfile!=null&&!mfile.isEmpty()) {
 			try {
@@ -54,9 +56,16 @@ public class PostReactController {
 	}//---------------------
 	
 	@GetMapping(value="/postList", produces="application/json")
-	public List<PostVO> getPostList(@ModelAttribute PagingVO pvo){
+	public Map<String,Object> getPostList(@ModelAttribute PagingVO pvo, HttpSession ses){
+		System.out.println("pvo=="+pvo);
+		int totalCount=this.postService.getPostCount(pvo);
+		pvo.setTotalCount(totalCount);
+		pvo.init(ses);
 		List<PostVO> postList=this.postService.listPosts(pvo);
-		return postList;
+		Map<String,Object> map=new HashMap<>();
+		map.put("totalCount", totalCount);
+		map.put("posts", postList);
+		return map;
 	}
 	
 	@PostMapping(value="/postEdit",produces="application/json")
