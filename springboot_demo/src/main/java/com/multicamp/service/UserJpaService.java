@@ -4,6 +4,7 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.multicamp.domain.UserEntity;
@@ -17,6 +18,9 @@ public class UserJpaService {
 	@Inject
 	private UserRepository userRepository;
 	
+	@Inject
+	private PasswordEncoder passwordEncoder;
+	
 	public UserEntity create(final UserEntity userEntity) {
 		if(userEntity==null||userEntity.getNickname()==null) {
 			throw new RuntimeException("Invalid arguments");			
@@ -26,6 +30,7 @@ public class UserJpaService {
 			logger.warn("nickname 은 이미 있습니다 {}", nickname);
 			throw new RuntimeException("Nickname already exists");
 		}
+		userEntity.setPwd(passwordEncoder.encode(userEntity.getPwd()));
 		return userRepository.save(userEntity);
 	}//-----------------------------------
 	
