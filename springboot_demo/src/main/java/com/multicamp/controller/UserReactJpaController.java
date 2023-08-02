@@ -8,12 +8,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.multicamp.domain.ReactUserVO;
 import com.multicamp.domain.ResponseVO;
 import com.multicamp.domain.UserEntity;
+import com.multicamp.service.TokenProvider;
 import com.multicamp.service.UserJpaService;
 
 @RestController
@@ -22,6 +22,9 @@ public class UserReactJpaController {
 	Logger logger=LoggerFactory.getLogger(getClass());
 	@Inject
 	private UserJpaService userService;
+	
+	@Inject
+	private TokenProvider tokenProvider;
 	
 	@PostMapping(value="/join")
 	public ResponseEntity<?> joinProcess(@RequestBody ReactUserVO  userVo){
@@ -66,9 +69,13 @@ public class UserReactJpaController {
 		logger.info("userVo={}",userVo);
 		UserEntity user=userService.getByCredentials(userVo.getNickname(), userVo.getPwd());
 		if(user!=null) {
+			/////////////////////////////
+			final String token=tokenProvider.create(user);
+			///////////////////////////////
 			final ReactUserVO resVo=ReactUserVO.builder()
 					.nickname(user.getNickname())
 					.idx(user.getIdx())
+					.token(token)
 					.build();
 			return ResponseEntity.ok().body(resVo);
 		}
