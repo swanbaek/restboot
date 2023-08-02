@@ -22,12 +22,10 @@ public class TokenProvider {
 	public String getUUID() {
 		return UUID.randomUUID().toString();
 	}
-	/*null
-	 * 
-	 * */
+
 	public String create(UserEntity userEntity) {
 	
-		System.out.println(SECRET_KEY);
+		//System.out.println(SECRET_KEY);
 		//기한 지금으로부터 1일로 설정
 		Date expiry=Date.from(Instant.now().plus(1,ChronoUnit.DAYS));
 		return Jwts.builder()
