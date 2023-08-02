@@ -19,10 +19,6 @@ import io.jsonwebtoken.security.Keys;
 public class TokenProvider {
 	private static final Key SECRET_KEY=Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
-	public String getUUID() {
-		return UUID.randomUUID().toString();
-	}
-
 	public String create(UserEntity userEntity) {
 		//기한 지금으로부터 1일로 설정
 		Date expiry=Date.from(Instant.now().plus(1,ChronoUnit.DAYS));
