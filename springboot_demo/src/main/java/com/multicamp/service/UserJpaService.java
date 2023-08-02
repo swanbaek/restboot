@@ -35,7 +35,12 @@ public class UserJpaService {
 	}//-----------------------------------
 	
 	public UserEntity getByCredentials(final String nickname, final String pwd) {
-		return userRepository.findByNicknameAndPwd(nickname, pwd);
+		//return userRepository.findByNicknameAndPwd(nickname, pwd); <=암호화하지 않았을 때 사용
+		final UserEntity originUser=userRepository.findByNickname(nickname);
+		if(originUser!=null && passwordEncoder.matches(pwd, originUser.getPwd())) {
+			return originUser;
+		}
+		return null;
 	}
 	
 

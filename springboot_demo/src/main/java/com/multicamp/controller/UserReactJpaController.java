@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.multicamp.domain.ReactUserVO;
@@ -58,6 +59,25 @@ public class UserReactJpaController {
 			logger.error("error={} ",e.getMessage());
 			return ResponseEntity.badRequest().body(resVo);
 		}
+	}//----------------------------------
+	
+	@PostMapping("/login")
+	public ResponseEntity<?> authenticate(@RequestBody ReactUserVO userVo){
+		logger.info("userVo={}",userVo);
+		UserEntity user=userService.getByCredentials(userVo.getNickname(), userVo.getPwd());
+		if(user!=null) {
+			final ReactUserVO resVo=ReactUserVO.builder()
+					.nickname(user.getNickname())
+					.idx(user.getIdx())
+					.build();
+			return ResponseEntity.ok().body(resVo);
+		}
+		
+		ResponseVO resErrVo=ResponseVO.builder()
+				.error("Login Failed")
+				.build();
+		return ResponseEntity.badRequest().body(resErrVo);
 	}
+	
 
 }
