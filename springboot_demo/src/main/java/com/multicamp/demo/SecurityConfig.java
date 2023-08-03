@@ -13,9 +13,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.multicamp.service.LoginValidatorService;
-
+/* 
 @EnableWebSecurity
 @Configuration
+
+*JWT인증 설정은 WebSecurityConfig에서 할 예정 따라서 위 어노테이션은 주석처리하자.
+*/
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	//회원 인증 서비스 객체 주입
 	@Inject

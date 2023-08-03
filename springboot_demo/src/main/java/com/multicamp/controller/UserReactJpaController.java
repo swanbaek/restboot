@@ -69,9 +69,9 @@ public class UserReactJpaController {
 		logger.info("userVo={}",userVo);
 		UserEntity user=userService.getByCredentials(userVo.getNickname(), userVo.getPwd());
 		if(user!=null) {
-			/////////////////////////////
+			///토큰 발급//////////////////////////
 			final String token=tokenProvider.create(user);
-			///////////////////////////////
+			////////////////////////////////
 			final ReactUserVO resVo=ReactUserVO.builder()
 					.nickname(user.getNickname())
 					.idx(user.getIdx())
