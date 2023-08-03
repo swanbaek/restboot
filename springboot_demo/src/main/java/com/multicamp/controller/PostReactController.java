@@ -24,7 +24,7 @@ import com.multicamp.domain.PagingVO;
 import com.multicamp.domain.PostVO;
 import com.multicamp.service.PostService;
 
-@RequestMapping("/api")
+//@RequestMapping("/api_old")
 @RestController
 public class PostReactController {
 	@Inject
