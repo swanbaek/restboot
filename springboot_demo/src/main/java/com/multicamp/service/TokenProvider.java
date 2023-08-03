@@ -14,7 +14,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-
+//여기서 발급된 token으로 매 api마다 인증해야 함
 @Service
 public class TokenProvider {
 	private static final Key SECRET_KEY=Keys.secretKeyFor(SignatureAlgorithm.HS512);
@@ -42,7 +42,7 @@ public class TokenProvider {
 		Claims claims = Jwts.parserBuilder()
                 .setSigningKey(SECRET_KEY)
                 .build()
-                .parseClaimsJws(token)
+                .parseClaimsJws(token)//토큰을 디코딩 및 파싱함
                 .getBody();  
 		return claims.getSubject();
 	}//---------------------
