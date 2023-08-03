@@ -47,7 +47,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		try {
 			//요청에서 토큰 가져오기
 			String token=parseBearerToken(request);
-			log.info("JwtAuthenticationFilter is running...");
+			log.info("JwtAuthenticationFilter is running... token==={}",token);
+			log.info("token==={}",token);
 			//토큰 검사
 			if(token!=null&&!token.equalsIgnoreCase("null")) {
 				//닉네임 가져오기. 위조된 경우 예외가 발생됨
@@ -74,6 +75,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	private String parseBearerToken(HttpServletRequest req) {
 		//http요청의 헤더를 파싱해 Bearer토큰을 반환한다
 		String bearerToken=req.getHeader("Authorization");
+		log.info("bearerToken==={}",bearerToken);
 		if(StringUtils.hasText(bearerToken)&&bearerToken.startsWith("Bearer ")) {
 			return bearerToken.substring(7);
 		}

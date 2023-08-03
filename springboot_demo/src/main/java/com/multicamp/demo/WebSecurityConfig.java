@@ -8,7 +8,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.CorsFilter;
 
 import com.multicamp.cmm.filter.JwtAuthenticationFilter;
 
@@ -40,7 +40,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		//////filter등록////////////
 		//http.addFilter(jwtAuthFilter);//이거 사용하면 에러남
-		  http.addFilterBefore( jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);		
+		// 매 요청마다
+	    // CorsFilter 실행한 후에
+	    // jwtAuthenticationFilter 실행한다.
+	    http.addFilterAfter(
+	    		jwtAuthFilter,
+	        CorsFilter.class
+	    );	
 
 	}// --------------------------------
 	 

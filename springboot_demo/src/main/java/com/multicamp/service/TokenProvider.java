@@ -18,7 +18,20 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class TokenProvider {
 	private static final Key SECRET_KEY=Keys.secretKeyFor(SignatureAlgorithm.HS512);
-
+	/*
+	  { // header
+	    "alg":"HS512"
+	  }.
+	  { // payload
+	    "sub":"40288093784915d201784916a40c0001",
+	    "iss": "demo app",
+	    "iat":1595733657,
+	    "exp":1596597657
+	  }.
+	  // SECRET_KEY를 이용해 서명한 부분
+	  Nn4d1MOVLZg79sfFACTIpCPKqWmpZMZQsbNrXdJJNWkRv50_l7bPLQPwhMobT4vBOG6Q3JYjhDrKFlBSaUxZOg
+	   */
+	    // JWT Token 생성
 	public String create(UserEntity userEntity) {
 		//기한 지금으로부터 1일로 설정
 		Date expiry=Date.from(Instant.now().plus(1,ChronoUnit.DAYS));
@@ -26,7 +39,7 @@ public class TokenProvider {
 		//헤더에 들어갈 내용
 		.signWith(SECRET_KEY)//signWith 메서드는 지정된 키와 지정된 알고리즘을 사용해	토큰에 서명을합니다.
 		//payload에 들어갈 내용
-		.setSubject(userEntity.getIdx()+"")//sub
+		.setSubject(userEntity.getNickname()+"")//sub 이부분에 닉네임을 저장하는 것에 유의하자
 		.setIssuer("demo app")//iss
 		.setIssuedAt(new Date())//iat
 		.setExpiration(expiry)//exp
