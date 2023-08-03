@@ -30,7 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/", 
 						"/configuration/**",
 						"/webjars/**","/js/**","/img/**",///js와 /img도 추가해야 됨
-						"/api/**")//react요청 처리 위해 추가함 				
+						"/api/**","/static/**")//react요청 처리 위해 추가함 				
 				.permitAll()
 				.antMatchers("/admin/**").hasRole("ADMIN")//.hasAnyAuthority("ROLE_ADMIN")//관리자로만 "/admin" url패턴 접근 가능 추가				
 				.antMatchers("/user/**").hasAnyRole("ADMIN","USER")
@@ -56,7 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	 *  보여져야 하는 경우가 대부분입니다. 
 	 *  이 경우 별도로 WebSecurity 하나를 인자로 갖는 configure를 오버라이딩해서 
 	 *  예외 처리를 할 수 있습니다.=> 이게 적용이 안되는 느낌???
-	 * */
+	 * 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring().antMatchers("/static/js/**", 
@@ -64,7 +64,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				"/static/img/**", 
 				"/static/frontend/**");
 	}
-	
+	*/
 	
 }
 //참조: https://github.com/nahwasa/spring-security-basic-project/tree/spring_boot_2.7.7

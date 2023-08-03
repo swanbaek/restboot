@@ -1,6 +1,7 @@
 package com.multicamp.cmm.filter;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.inject.Inject;
 import javax.servlet.FilterChain;
@@ -22,6 +23,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.multicamp.service.TokenProvider;
 /*교재 272p
+ * 모든 요청에 대해 한번씩 사용자를 인증하기 위해 필터를 구현해보자 
+ * ******************************************
  * OncePerRequestFilter 클래스를 상속받으면
  * - 한 요청당 반드시 한번만 실행되는 필터
  * - 따라서 한 번만 인증하면 되는 경우에 맞는 필터다
@@ -81,5 +84,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		}
 		return null;
 	}
+	/*회원가입과 로그인등의 url은 filter을 거치지 않게 해야 하므로
+		OncePerRequestFilter의 shouldNotFilter()을 오버라이딩 하여 해결해보자
+	 * */
+ 	@Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+
+        String[] excludePath = {"/api/join", "/api/login"};
+        String path = request.getRequestURI();
+        return Arrays.stream(excludePath).anyMatch(path::startsWith);
+    }
 
 }
