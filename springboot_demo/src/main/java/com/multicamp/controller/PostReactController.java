@@ -24,8 +24,11 @@ import com.multicamp.domain.PagingVO;
 import com.multicamp.domain.PostVO;
 import com.multicamp.service.PostService;
 
+import lombok.extern.slf4j.Slf4j;
+
 //@RequestMapping("/api_old")
 @RestController
+@Slf4j
 public class PostReactController {
 	@Inject
 	private PostService postService;
@@ -78,7 +81,9 @@ public class PostReactController {
 	}
 	
 	@DeleteMapping(value="/postDelete/{id}", produces="application/json")
-	public ModelMap updatePost(@PathVariable("id") int id) {
+	public ModelMap deletePost(@PathVariable("id") int id) {
+		System.out.println("===delete======================"+id);
+		log.info("delete id={}",id);
 		int n=this.postService.deletePost(id);
 		ModelMap map=new ModelMap();
 		String str=(n>0)?"ok":"fail";
