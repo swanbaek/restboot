@@ -15,8 +15,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -95,4 +98,49 @@ public class PostReactJpaController {
 		map.put("posts", postList);
 		return map;
 	}
+	@PostMapping(value="/postEdit",produces="application/json")
+	public ModelMap updatePost(@AuthenticationPrincipal String nickname, PostJpaVO vo,HttpSession ses) {
+		log.info("updatePost nickname={}",nickname);
+		ModelMap map=new ModelMap();
+		try {
+			//[0] 파일 업로드 처리
+			ServletContext ctx=ses.getServletContext();
+			String upDir=ctx.getRealPath("/upload");
+			//System.out.println("vo=="+vo+", upDir: "+upDir+"mfilename: "+vo.getMfilename());
+			MultipartFile mfile=vo.getMfilename();
+			if(mfile!=null&&!mfile.isEmpty()) {
+				try {
+					mfile.transferTo(new File(upDir,mfile.getOriginalFilename()));
+				} catch (IllegalStateException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			vo.setFilename(mfile.getOriginalFilename());
+			vo.setName(nickname);
+		
+		PostEntity entity=PostJpaVO.toEntity(vo);
+		int n=this.postService.updatePost(entity);
+	
+		String str=(n>0)?"ok":"fail";
+		map.put("result", str);
+		return map;
+		}catch(Exception e) {
+			//[8] 예외 발생시 응답 처리
+			log.error("error: {} ", e);
+			map.put("result", "error "+e.getMessage());
+			return map;
+		}
+	}
+	
+	@DeleteMapping(value="/postDelete/{id}", produces="application/json")
+	public ModelMap updatePost(@PathVariable("id") int id) {
+		int n=this.postService.deletePost(id);
+		ModelMap map=new ModelMap();
+		String str=(n>0)?"ok":"fail";
+		map.put("result", str);
+		return map;
+	}
+	
 }
