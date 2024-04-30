@@ -30,6 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/", 
 						"/configuration/**",
 						"/webjars/**","/js/**","/img/**",///js와 /img도 추가해야 됨
+						"/upload/**",
 						"/api/**","/static/**")//react요청 처리 위해 추가함 				
 				.permitAll()
 				.antMatchers("/admin/**").hasRole("ADMIN")//.hasAnyAuthority("ROLE_ADMIN")//관리자로만 "/admin" url패턴 접근 가능 추가				

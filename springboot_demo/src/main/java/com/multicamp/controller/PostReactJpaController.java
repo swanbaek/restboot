@@ -2,7 +2,9 @@ package com.multicamp.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -13,14 +15,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.multicamp.domain.PagingVO;
 import com.multicamp.domain.PostEntity;
 import com.multicamp.domain.PostJpaVO;
+import com.multicamp.domain.PostVO;
 import com.multicamp.domain.ResponseVO;
 import com.multicamp.service.PostJpaService;
 //참고: https://github.com/fsoftwareengineer/todo-application-revision2
@@ -78,4 +83,16 @@ public class PostReactJpaController {
 		}
 	}
 
+	@GetMapping(value="/postList", produces="application/json")
+	public Map<String,Object> getPostList(@ModelAttribute PagingVO pvo, HttpSession ses){
+		System.out.println("pvo=="+pvo);
+		int totalCount=this.postService.getPostCount(pvo);
+		pvo.setTotalCount(totalCount);
+		pvo.init(ses);
+		List<PostEntity> postList=this.postService.listPosts(pvo);
+		Map<String,Object> map=new HashMap<>();
+		map.put("totalCount", totalCount);
+		map.put("posts", postList);
+		return map;
+	}
 }
