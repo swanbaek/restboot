@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.multicamp.domain.PagingVO;
 import com.multicamp.domain.PostEntity;
-import com.multicamp.domain.PostVO;
 import com.multicamp.persistence.PostRepository;
 
 @Service("postJpaService")
@@ -45,13 +44,20 @@ public class PostJpaService{
 		// TODO Auto-generated method stub
 		return this.repository.findAll();
 	}
-	public int updatePost(PostVO vo) {
+	public int updatePost(final PostEntity vo) {
 		// TODO Auto-generated method stub
-		return 0;
+		PostEntity post=this.repository.findById(vo.getId()).orElseThrow();
+		post.setContent(vo.getContent());
+		post.setFilename(vo.getFilename());
+		post.setName(vo.getName());
+		post.setWdate(vo.getWdate());
+		this.repository.save(post);
+		return 1;
+		
 	}
 	public int deletePost(int id) {
-		// TODO Auto-generated method stub
-		return 0;
+		this.repository.deleteById(id);
+		return 1;
 	}
 
 }
