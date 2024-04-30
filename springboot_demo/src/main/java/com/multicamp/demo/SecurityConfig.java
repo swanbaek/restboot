@@ -52,6 +52,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+	/*********************************************************************************
+- 사용자 정의 인증 처리 (Optional): configure(AuthenticationManagerBuilder auth) 메서드를 사용하여 
+사용자 정의 인증 처리를 구성할 수 있습니다. 아래 예제에서는 간단한 인메모리 인증을 설정했습니다. 
+실제 프로덕션 환경에서는 데이터베이스 기반의 사용자 인증 또는 LDAP, OAuth 등의 외부 인증을 사용할 수 있습니다.
+	 ******************************************************************************** */
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		System.out.println("configure(): "+passwordEncoder());
@@ -62,6 +67,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			//.withUser("admin").password(passwordEncoder().encode("1234")).roles("ADMIN");
 	}
 	
-
-
 }
