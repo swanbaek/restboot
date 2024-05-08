@@ -18,7 +18,8 @@ allocationSize = 1)//메모리 통해 할당할 범위 사이즈
 public class RefreshToken {
 	
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "refresh_token_SEQ_GEN")
     @Column(name = "id", updatable = false)
     private Long id;
 

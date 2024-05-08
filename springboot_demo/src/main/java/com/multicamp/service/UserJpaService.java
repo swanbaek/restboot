@@ -2,7 +2,6 @@ package com.multicamp.service;
 
 import javax.inject.Inject;
 
-import org.apache.el.stream.Optional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

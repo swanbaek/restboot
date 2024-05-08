@@ -19,17 +19,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.multicamp.domain.ReactUserVO;
+import com.multicamp.domain.RefreshToken;
 import com.multicamp.domain.ResponseVO;
 import com.multicamp.domain.UserEntity;
+import com.multicamp.dto.ReactUserResponseDTO;
+import com.multicamp.service.RefreshTokenService;
 import com.multicamp.service.TokenProvider;
 import com.multicamp.service.UserJpaService;
-
+//참고: https://github.com/urstoryp/fakeshopapi/tree/step04
 @RestController
 @RequestMapping("/api")
 public class UserReactJpaController {
 	Logger logger=LoggerFactory.getLogger(getClass());
 	@Inject
 	private UserJpaService userService;
+	
+	@Inject
+	private RefreshTokenService refreshTokenService;
 	
 	@Inject
 	private TokenProvider tokenProvider;
@@ -71,20 +77,36 @@ public class UserReactJpaController {
 			return ResponseEntity.badRequest().body(resVo);
 		}
 	}//----------------------------------
-	
+	//참고: https://github.com/urstoryp/fakeshopapi/tree/step04
 	@PostMapping("/login")
 	public ResponseEntity<?> authenticate(@RequestBody ReactUserVO userVo){
 		logger.info("userVo={}",userVo);
 		UserEntity user=userService.getByCredentials(userVo.getNickname(), userVo.getPwd());
+		logger.info("userEntity user={}",user);
 		if(user!=null) {
 			///토큰 발급//////////////////////////
 			//final String token=tokenProvider.create(user);//토큰 만료일 1일(디폴트 1일로 설정함)
 			final String token=tokenProvider.createToken(user, Duration.ofHours(1));//토큰 만료 1시간 뒤로 설정
+			
+			//refresh token도 발급
+			final String refreshToken=tokenProvider.createRefreshToken(user, Duration.ofDays(7));//refresh토큰 만료 7일 뒤로 설정			
 			////////////////////////////////
-			final ReactUserVO resVo=ReactUserVO.builder()
+			//refreshToken db에 저장(일련번호, 회원idx, 토큰값)
+			RefreshToken rEntity=new RefreshToken(user.getIdx(), refreshToken);
+			refreshTokenService.addRefreshToken(rEntity);
+			logger.info("refreshToken테이블에 저장");
+			/*
+			final ReactUserVO resVo=ReactUserVO.builder() //==>이걸 사용하면 사용자정보 name,pwd 등도 null로 응답데이터에 포함됨.
 					.nickname(user.getNickname())
 					.idx(user.getIdx())
 					.token(token)
+					.refreshToken(refreshToken)
+					.build();*/
+			final ReactUserResponseDTO resVo=ReactUserResponseDTO.builder()
+					.accessToken(token)
+					.refreshToken(refreshToken)
+					.userIdx(user.getIdx())
+					.nickname(user.getNickname())
 					.build();
 			return ResponseEntity.ok().body(resVo);
 		}

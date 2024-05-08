@@ -24,6 +24,8 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class TokenProvider {
 	private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+	//public final static Long ACCESS_TOKEN_EXPIRE_COUNT = 30 * 60 * 1000L; // 30 minutes
+	//public final static Long REFRESH_TOKEN_EXPIRE_COUNT = 7 * 24 * 60 * 60 * 1000L; // 7 days
 
 	/*
 	 * { // header "alg":"HS512" }. { // payload
@@ -51,6 +53,11 @@ public class TokenProvider {
 	public String createToken(UserEntity user, Duration expiredAt) {
         Date now = new Date();
         return makeToken(new Date(now.getTime() + expiredAt.toMillis()), user);
+    }
+	
+	public String createRefreshToken(UserEntity user, Duration expiredAt) {
+		Date now = new Date();
+		return makeToken(new Date(now.getTime() + expiredAt.toMillis()), user);
     }
 	
 	private String makeToken(Date expiry, UserEntity userEntity) {
@@ -90,7 +97,7 @@ public class TokenProvider {
 			return false;
 		}
 	}// ---------------------
-
+	//토큰으로 인증객체 가져오기
 	public Authentication getAuthentication(String token) {
 		Claims claims = getClaims(token);
 		Set<SimpleGrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
@@ -105,7 +112,7 @@ public class TokenProvider {
 				.getBody();
 		return claims;
 	}
-	
+	//토큰으로 회원번호(idx) 가져오기
 	public Long getUserIdx(String token) {
         Claims claims = getClaims(token);
         return claims.get("id", Long.class);
