@@ -2,13 +2,22 @@ package com.multicamp.demo;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.multicamp.service.UserJpaDetailService;
+
+import lombok.RequiredArgsConstructor;
+
 @Configuration
+@RequiredArgsConstructor
 public class WebMvcJwtConfig {
+	
+	private final UserJpaDetailService userService;
 
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -18,9 +27,6 @@ public class WebMvcJwtConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		return http.authorizeRequests().antMatchers("/", "/configuration/**", "/webjars/**", "/js/**", "/img/**", /// js와
-																													/// /img도
-																													/// 추가해야
-																													/// 됨
 				"/upload/**", "/api/**", "/static/**")// react요청 처리 위해 추가
 				.permitAll().antMatchers("/admin/**").hasRole("ADMIN")// .hasAnyAuthority("ROLE_ADMIN")//관리자로만 "/admin"
 																		// url패턴 접근 가능 추가
@@ -32,5 +38,22 @@ public class WebMvcJwtConfig {
 				.sessionManagement()// session기반이 아님을 선언
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().build();
 	}
-
+	/*AuthenticationManager는 주어진 인증 요청을 처리하여 인증된 사용자에 대한 Authentication 객체를 반환하는 인터페이스이며, 
+	 * 이를 통해 Spring Security는 다양한 인증 방식을 지원하고 사용자의 인증을 관리함.
+			- 인터페이스의 주요 메서드:
+			Authentication authenticate(Authentication auth): 주어진 인증 객체를 사용하여 인증을 시도하고, 
+									인증된 사용자에 대한 Authentication 객체를 반환합니다. 
+									예외를 발생시키거나 인증에 실패한 경우 null을 반환할 수 있다.
+	 * */
+	//사용자의 인증을 처리하는 데 필요한 구성을 정의하는 메서드
+	@Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder, 
+    		UserJpaDetailService userDetailService) throws Exception {
+        return http.getSharedObject(AuthenticationManagerBuilder.class)
+                .userDetailsService(userService)//사용자의 인증정보를 가져오는 서비스를 설정함
+                .passwordEncoder(bCryptPasswordEncoder)//사용자 비번을 암호화하는 방법 설정
+                .and()//이전 설정과 다음 설정을 연결
+                .build();
+        
+    }
 }
