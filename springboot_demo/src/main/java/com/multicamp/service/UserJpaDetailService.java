@@ -19,7 +19,7 @@ public class UserJpaDetailService implements UserDetailsService {
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		UserEntity userEnty=userRepository.findByNickname(username)
+		UserEntity userEnty=userRepository.findByNickname(username);
 		if(userEnty==null) {
 			throw new UsernameNotFoundException(username+"란 회원은 없습니다");
 		}
