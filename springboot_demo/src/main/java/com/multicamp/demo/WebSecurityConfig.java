@@ -11,8 +11,8 @@ import org.springframework.web.filter.CorsFilter;
 
 import com.multicamp.cmm.filter.JwtAuthenticationFilter;
 
-@EnableWebSecurity
-@Configuration
+//@EnableWebSecurity
+//@Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter 
 {
 	//회원 인증 서비스 객체 주입
