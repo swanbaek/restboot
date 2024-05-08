@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import com.multicamp.domain.UserEntity;
 
 @Repository
-public interface UserRepository extends JpaRepository<UserEntity, String> {
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
 	
 	UserEntity findByNickname(String nickname);
 	Boolean existsByNickname(String nickname);
