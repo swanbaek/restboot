@@ -39,7 +39,7 @@ public class TokenProvider {
 				// 헤더에 들어갈 내용
 				.signWith(SECRET_KEY)// signWith 메서드는 지정된 키와 지정된 알고리즘을 사용해 토큰에 서명을합니다.
 				// payload에 들어갈 내용
-				.setSubject(userEntity.getNickname() + "")// sub 이부분에 닉네임을 저장하는 것에 유의하자
+				.setSubject(userEntity.getNickname())// sub 이부분에 닉네임을 저장하는 것에 유의하자
 				.setIssuer("demo app")// iss
 				.setIssuedAt(new Date())// iat
 				.setExpiration(expiry)// exp

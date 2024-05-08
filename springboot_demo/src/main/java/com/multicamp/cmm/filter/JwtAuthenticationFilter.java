@@ -2,6 +2,8 @@ package com.multicamp.cmm.filter;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.servlet.FilterChain;
@@ -13,7 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -50,7 +52,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		try {
 			//요청에서 토큰 가져오기
 			String token=parseBearerToken(request);
-			log.info("JwtAuthenticationFilter is running... token==={}",token);
+			//log.info("JwtAuthenticationFilter is running... token==={}",token);
 			log.info("token==={}",token);
 			//토큰 검사
 			if(token!=null&&!token.equalsIgnoreCase("null")) {
@@ -58,8 +60,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 				String nickname=tokenProvider.validateAndGetUserId(token);
 				log.info("Authenticated Nickname: {}", nickname);
 				//인증 완료. SecurityContextHolder에 등록해야 인증된 사용자라고 생각한다
+				
+			 Set<SimpleGrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
+				
 				AbstractAuthenticationToken authentication
-				=new UsernamePasswordAuthenticationToken(nickname, null,AuthorityUtils.NO_AUTHORITIES);
+				=new UsernamePasswordAuthenticationToken(nickname, token,authorities);//AuthorityUtils.NO_AUTHORITIES);
 					//인증된 사용자정보(nickname)을 넣어준다
 				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 				
@@ -67,7 +72,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 				ctx.setAuthentication(authentication);
 				//SecurityContext에 인증정보  authentication을 넣고 다시 SecurityContextHolder에 컨텍스트로 등록해야 한다
 				SecurityContextHolder.setContext(ctx);
-				//이제 이 필터를 컨테이너가 사용하도록 설정작업을 해야 한다. 즉 스프링 시큐리티에게 이 필터를 사용하도록 설정하자									
+				//이제 이 필터를 컨테이너가 사용하도록 설정작업을 해야 한다. 즉 스프링 시큐리티에게 이 필터를 사용하도록 설정하자	
+				
+				/*//아래 코드로 실행하면 에러가 남. post글쓰기 할때 username이 null이란 에러가 발생함
+				 * if(tokenProvider.validToken(token)) { Authentication authentication =
+				 * tokenProvider.getAuthentication(token);
+				 * SecurityContextHolder.getContext().setAuthentication(authentication);
+				 * log.info("SecurityContextHolder에 인증객체 설정 완료!!!"); }
+				 */
+				
 			}
 			
 		} catch (Exception e) {

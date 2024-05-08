@@ -1,5 +1,6 @@
 package com.multicamp.controller;
 
+import java.time.Duration;
 import java.util.Arrays;
 
 import javax.inject.Inject;
@@ -77,7 +78,8 @@ public class UserReactJpaController {
 		UserEntity user=userService.getByCredentials(userVo.getNickname(), userVo.getPwd());
 		if(user!=null) {
 			///토큰 발급//////////////////////////
-			final String token=tokenProvider.create(user);
+			//final String token=tokenProvider.create(user);//토큰 만료일 1일(디폴트 1일로 설정함)
+			final String token=tokenProvider.createToken(user, Duration.ofHours(1));//토큰 만료 1시간 뒤로 설정
 			////////////////////////////////
 			final ReactUserVO resVo=ReactUserVO.builder()
 					.nickname(user.getNickname())
