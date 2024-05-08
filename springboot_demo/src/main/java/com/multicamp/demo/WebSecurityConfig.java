@@ -4,7 +4,6 @@ import javax.inject.Inject;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -14,12 +13,12 @@ import com.multicamp.cmm.filter.JwtAuthenticationFilter;
 
 @EnableWebSecurity
 @Configuration
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter 
+{
 	//회원 인증 서비스 객체 주입
 	@Inject
 	private JwtAuthenticationFilter jwtAuthFilter;
 	
-
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable().httpBasic().disable() //token을 사용하므로 basic인증 비활성화
@@ -48,8 +47,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	    		jwtAuthFilter,
 	        CorsFilter.class
 	    );	
-
+	   
 	}// --------------------------------
+
 	 
 	/*
 	 * 백엔드, 프론트엔드가 분리되지 않은 프로젝트의 경우(스프링부트에서 jsp나 타임리프를 붙여서 하나의 프로젝트로
