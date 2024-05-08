@@ -32,7 +32,7 @@ public class LoginValidatorService implements UserDetailsService{
 	//UserDetailsService의 추상메서드 재정의
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		UserVO tmp_user=new UserVO();
+		UserVO tmp_user=UserVO.builder().build();
 		tmp_user.setUserid(username);
 		UserVO user=userMapper.findUser(tmp_user);
 		if(user==null)
