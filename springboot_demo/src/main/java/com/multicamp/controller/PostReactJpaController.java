@@ -135,7 +135,8 @@ public class PostReactJpaController {
 	}
 	
 	@DeleteMapping(value="/postDelete/{id}", produces="application/json")
-	public ModelMap deletePost(@PathVariable("id") int id) {
+	public ModelMap deletePost(@PathVariable("id") int id, @AuthenticationPrincipal String nickname) {
+		log.info("delete nickname={}",nickname);
 		int n=this.postService.deletePost(id);
 		ModelMap map=new ModelMap();
 		String str=(n>0)?"ok":"fail";
