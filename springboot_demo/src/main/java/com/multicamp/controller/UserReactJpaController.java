@@ -1,10 +1,17 @@
 package com.multicamp.controller;
 
+import java.util.Arrays;
+
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -85,6 +92,14 @@ public class UserReactJpaController {
 				.build();
 		return ResponseEntity.badRequest().body(resErrVo);
 	}
-	
-
-}
+	//리액트에서 로그아웃 처리는 localStorage에서 access token을 삭제하는 것으로만 처리하고 별도로 백엔드 요청을 보내지는 않았음
+	//but 만약 백엔드로 요청을 보낸다면 아래와 같이 처리하면 될 듯
+	 @GetMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
+		 	//SecurityContextHolder에서 등록된 인증받은 객체를 로그아웃 핸들러로 로그아웃 처리
+		 	//logout() 메서드를 호출함으로써, 세션에서 사용자의 인증 정보를 제거하고, 필요한 경우 세션을 무효화하거나 새로운 세션을 생성할 수 있다.
+	        new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
+	        ResponseVO resVo=ResponseVO.builder().data(Arrays.asList("Logout Success")).build();
+	        return ResponseEntity.ok(resVo);
+    }
+}/////////////////////////////////////
