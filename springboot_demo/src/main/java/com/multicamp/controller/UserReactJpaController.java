@@ -26,7 +26,8 @@ import com.multicamp.dto.ReactUserResponseDTO;
 import com.multicamp.service.RefreshTokenService;
 import com.multicamp.service.TokenProvider;
 import com.multicamp.service.UserJpaService;
-//참고: https://github.com/urstoryp/fakeshopapi/tree/step04
+//참고: https://github.com/urstoryp/fakeshopapi/tree/step04,
+//https://www.youtube.com/watch?v=hDoa7Zw1r6c
 //https://jwt.io/#debugger-io  ==> token값을 encode할 수 있는 사이트. 토큰에 대한 정보가 출력됨
 @RestController
 @RequestMapping("/api")
