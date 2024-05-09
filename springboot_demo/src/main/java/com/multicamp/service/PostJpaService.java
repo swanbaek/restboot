@@ -42,7 +42,8 @@ public class PostJpaService{
 	
 	public List<PostEntity> listPosts(PagingVO page) {
 		// TODO Auto-generated method stub
-		return this.repository.findAll();
+		//return this.repository.findAll();
+		return this.repository.findAllByOrderByIdDesc();
 	}
 	public int updatePost(final PostEntity vo) {
 		// TODO Auto-generated method stub
@@ -55,7 +56,7 @@ public class PostJpaService{
 		return 1;
 		
 	}
-	public int deletePost(int id) {
+	public int deletePost(Long id) {
 		this.repository.deleteById(id);
 		return 1;
 	}

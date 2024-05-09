@@ -31,7 +31,7 @@ public class PostEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "REACT_POST_SEQ_GEN")
-	private int id;
+	private Long id;
 	private String name;
 	private String content;
 	private String filename;
