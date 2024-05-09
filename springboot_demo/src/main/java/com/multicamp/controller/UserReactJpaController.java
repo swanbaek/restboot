@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,9 +23,12 @@ import com.multicamp.domain.RefreshToken;
 import com.multicamp.domain.ResponseVO;
 import com.multicamp.domain.UserEntity;
 import com.multicamp.dto.ReactUserResponseDTO;
+import com.multicamp.dto.RefreshTokenDTO;
 import com.multicamp.service.RefreshTokenService;
 import com.multicamp.service.TokenProvider;
 import com.multicamp.service.UserJpaService;
+
+import io.jsonwebtoken.Claims;
 //참고: https://github.com/urstoryp/fakeshopapi/tree/step04,
 //https://www.youtube.com/watch?v=hDoa7Zw1r6c
 //https://jwt.io/#debugger-io  ==> token값을 encode할 수 있는 사이트. 토큰에 대한 정보가 출력됨
@@ -119,13 +122,41 @@ public class UserReactJpaController {
 		return ResponseEntity.badRequest().body(resErrVo);
 	}
 	//리액트에서 로그아웃 처리는 localStorage에서 access token을 삭제하는 것으로만 처리하고 별도로 백엔드 요청을 보내지는 않았음
-	//but 만약 백엔드로 요청을 보낸다면 아래와 같이 처리하면 될 듯
-	 @GetMapping("/logout")
-    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
-		 	//SecurityContextHolder에서 등록된 인증받은 객체를 로그아웃 핸들러로 로그아웃 처리
+	//but 만약 백엔드로 요청을 보낸다면 아래와 같이 처리하면 될 듯===>다시 수정.react에서 api요청을 보내 refreshToken을 삭제해줘야 함. 안그러면 db에 계속 쌓임
+	 @DeleteMapping("/logout")
+    public ResponseEntity<?> logout(@RequestBody RefreshTokenDTO refreshDto, HttpServletRequest request, HttpServletResponse response) {
+		 this.refreshTokenService.deleteRefreshToken(refreshDto.getRefreshToken());//DB에서 refreshToken삭제
+		 
+		 //SecurityContextHolder에서 등록된 인증받은 객체를 로그아웃 핸들러로 로그아웃 처리
 		 	//logout() 메서드를 호출함으로써, 세션에서 사용자의 인증 정보를 제거하고, 필요한 경우 세션을 무효화하거나 새로운 세션을 생성할 수 있다.
 	        new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
 	        ResponseVO resVo=ResponseVO.builder().data(Arrays.asList("Logout Success")).build();
 	        return ResponseEntity.ok(resVo);
+	        //return new ResponseEntity(HttpStatus.OK);
     }
+	 /*
+	    1. 전달받은 유저의 아이디로 유저가 존재하는지 확인한다.
+	    2. RefreshToken이 유효한지 체크한다.
+	    3. AccessToken을 발급하여 기존 RefreshToken과 함께 응답한다.
+     */
+	@PostMapping("/refreshToken")
+	public ResponseEntity<?> requestRefresh(@RequestBody RefreshTokenDTO refreshDto) {
+		RefreshToken rtoken=this.refreshTokenService.findByRefreshToken(refreshDto.getRefreshToken());
+		Claims claims=this.tokenProvider.parseToken(refreshDto.getRefreshToken());
+		Long userIdx=Long.valueOf((Integer)claims.get("id"));
+		String nickname=claims.getSubject();
+		
+		UserEntity userEnty=userService.findById(userIdx);
+		String accessToken=this.tokenProvider.create(userEnty);
+		ReactUserResponseDTO dto = ReactUserResponseDTO.builder()
+				.accessToken(accessToken)
+				.refreshToken(refreshDto.getRefreshToken())
+				.userIdx(userIdx)
+				.nickname(nickname)
+				.build();
+		return ResponseEntity.ok(dto);
+	}
+	
+	
+	
 }/////////////////////////////////////

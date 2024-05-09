@@ -19,6 +19,12 @@ public class WebMvcJwtConfig {
 	
 	private final UserJpaDetailService userService;
 
+	/*BCrypt는 비밀번호를 안전하게 저장하기 위한 해시 함수. 
+	 * BCrypt는 비밀번호 해싱을 위해 Blowfish 암호화 알고리즘을 사용하며, 
+	 * 암호화된 비밀번호를 저장할 때 임의의 솔트(salt)를 생성하여 비밀번호의 보안성을 높입니다.
+	   BCrypt는 강력한 암호화 알고리즘을 사용하기 때문에 해독이 거의 불가능합니다. 
+	   이는 해커가 데이터베이스를 공격하여 해시된 비밀번호를 복원하는 것을 어렵게 만듭니다. 
+	 * */
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
