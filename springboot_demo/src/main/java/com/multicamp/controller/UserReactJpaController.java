@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.util.Arrays;
 
 import javax.inject.Inject;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -84,7 +85,7 @@ public class UserReactJpaController {
 	}//----------------------------------
 	//참고: https://github.com/urstoryp/fakeshopapi/tree/step04
 	@PostMapping("/login")
-	public ResponseEntity<?> authenticate(@RequestBody ReactUserVO userVo){
+	public ResponseEntity<?> authenticate(@RequestBody ReactUserVO userVo, HttpServletResponse res){
 		logger.info("userVo={}",userVo);
 		UserEntity user=userService.getByCredentials(userVo.getNickname(), userVo.getPwd());
 		logger.info("userEntity user={}",user);
@@ -107,6 +108,13 @@ public class UserReactJpaController {
 					.token(token)
 					.refreshToken(refreshToken)
 					.build();*/
+			//refreshToken은 쿠키에 저장하여 응답에 추가하고
+			//accessToken은 response 응답데이터에 포함하여 보내면=> 리액트에서 이를 받아 요청 보낼때 헤더에 포함시켜 전송한다
+			Cookie ck=new Cookie("refreshToken", refreshToken);
+			ck.setMaxAge((int)Duration.ofDays(7).toMillis());
+			ck.setPath("/");
+			res.addCookie(ck);		
+			
 			final ReactUserResponseDTO resVo=ReactUserResponseDTO.builder()
 					.accessToken(token)
 					.refreshToken(refreshToken)
