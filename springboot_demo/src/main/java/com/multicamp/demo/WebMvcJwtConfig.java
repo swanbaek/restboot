@@ -34,9 +34,10 @@ public class WebMvcJwtConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		return http.authorizeRequests().antMatchers("/", "/configuration/**", "/webjars/**", "/js/**", "/img/**", /// js와
 				"/upload/**", "/api/**", "/static/**")// react요청 처리 위해 추가
-				.permitAll().antMatchers("/admin/**").hasRole("ADMIN")// .hasAnyAuthority("ROLE_ADMIN")//관리자로만 "/admin"
-																		// url패턴 접근 가능 추가
-				.antMatchers("/user/**").hasAnyRole("ADMIN", "USER").anyRequest().authenticated().and().formLogin()
+				.permitAll()
+				.antMatchers("/admin/**").hasRole("ADMIN")// .hasAnyAuthority("ROLE_ADMIN")//관리자로만 "/admin"
+				.antMatchers("/user/**").hasAnyRole("ADMIN", "USER")
+				.anyRequest().authenticated().and().formLogin()
 				.disable()
 				// .logout().invalidateHttpSession(true)
 				// .logoutSuccessUrl("/login")

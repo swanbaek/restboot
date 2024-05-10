@@ -6,10 +6,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
-import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,6 +34,13 @@ public class PostEntity {
 	private String name;
 	private String content;
 	private String filename;
+	//@Column(name="wdate", insertable = false, updatable = false)	//default를 sysdate로 했을 경우는 컬럼에 insertable=false 설정을 해준다.
 	private Date wdate;
+	
+	@PrePersist
+    public void prePersist() {
+        this.wdate = new Date(); //sysdate를 디폴트로 주지 않았을 경우는 시스템의 현재 날짜를 설정해서 넘기자.
+    }
+    
 
 }

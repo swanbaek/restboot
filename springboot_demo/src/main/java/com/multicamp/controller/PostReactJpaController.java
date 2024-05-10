@@ -87,12 +87,13 @@ public class PostReactJpaController {
 	}
 
 	@GetMapping(value="/postList", produces="application/json")
-	public Map<String,Object> getPostList(@ModelAttribute PagingVO pvo, HttpSession ses){
-		System.out.println("pvo=="+pvo);
+	public Map<String,Object> getPostList(PagingVO pvo, HttpSession ses){
+		//System.out.println("pvo=="+pvo);
 		int totalCount=this.postService.getPostCount(pvo);
 		pvo.setTotalCount(totalCount);
 		pvo.init(ses);
 		List<PostEntity> postList=this.postService.listPosts(pvo);
+		log.info("postList={}",postList);
 		Map<String,Object> map=new HashMap<>();
 		map.put("totalCount", totalCount);
 		map.put("posts", postList);

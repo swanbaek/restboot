@@ -53,7 +53,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			//요청에서 토큰 가져오기
 			String token=parseBearerToken(request);
 			//log.info("JwtAuthenticationFilter is running... token==={}",token);
-			log.info("token==={}",token);
+			//log.info("token==={}",token);
 			//토큰 검사
 			if(token!=null&&!token.equalsIgnoreCase("null")) {
 				//닉네임 가져오기. 위조된 경우 예외가 발생됨
