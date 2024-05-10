@@ -64,7 +64,7 @@ public class PostReactJpaController {
 		//[1] VO를 Entity로 변환한다
 		PostEntity entity=PostJpaVO.toEntity(vo);
 		//[2] id를 0으로 초기화한다. 생성 당시에는 id가 없으므로
-		entity.setId(0);
+		entity.setId(0L);
 		//[3] Authentication Bearer Token을 통해 받은 nickname을 넘긴다
 		entity.setName(nickname);
 		
@@ -135,7 +135,7 @@ public class PostReactJpaController {
 	}
 	
 	@DeleteMapping(value="/postDelete/{id}", produces="application/json")
-	public ModelMap deletePost(@PathVariable("id") int id, @AuthenticationPrincipal String nickname) {
+	public ModelMap deletePost(@PathVariable("id") Long id, @AuthenticationPrincipal String nickname) {
 		log.info("delete nickname={}",nickname);
 		int n=this.postService.deletePost(id);
 		ModelMap map=new ModelMap();
