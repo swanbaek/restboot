@@ -33,10 +33,10 @@ public class TokenProvider {
 	 * "iat":1595733657, "exp":1596597657 }. // SECRET_KEY를 이용해 서명한 부분
 	 * Nn4d1MOVLZg79sfFACTIpCPKqWmpZMZQsbNrXdJJNWkRv50_l7bPLQPwhMobT4vBOG6Q3JYjhDrKFlBSaUxZOg
 	 */
-	// JWT Token 생성-만료기한 1일 설정
+	// JWT Token 생성-만료기한 1시간 설정
 	public String create(UserEntity userEntity) {
-		// 기한 지금으로부터 1일로 설정
-		Date expiry = Date.from(Instant.now().plus(1, ChronoUnit.DAYS));
+		// 기한 지금으로부터 1시간로 설정
+		Date expiry = Date.from(Instant.now().plus(1, ChronoUnit.HOURS));
 		return Jwts.builder()
 				// 헤더에 들어갈 내용
 				.signWith(SECRET_KEY)// signWith 메서드는 지정된 키와 지정된 알고리즘을 사용해 토큰에 서명을합니다.

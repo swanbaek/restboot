@@ -2,9 +2,13 @@ package com.multicamp.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -28,7 +32,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.multicamp.domain.PagingVO;
 import com.multicamp.domain.PostEntity;
 import com.multicamp.domain.PostJpaVO;
-import com.multicamp.domain.PostVO;
 import com.multicamp.domain.ResponseVO;
 import com.multicamp.service.PostJpaService;
 //참고: https://github.com/fsoftwareengineer/todo-application-revision2
@@ -47,10 +50,13 @@ public class PostReactJpaController {
 		try {
 		//[0] 파일 업로드 처리
 		ServletContext ctx=ses.getServletContext();
-		String upDir=ctx.getRealPath("/upload");
+		String upDir=ctx.getRealPath("/images/upload");
 		//System.out.println("vo=="+vo+", upDir: "+upDir+"mfilename: "+vo.getMfilename());
+		
+		
 		MultipartFile mfile=vo.getMfilename();
-		if(mfile!=null&&!mfile.isEmpty()) {
+		String fname=storeFile(mfile);
+		/*(if(mfile!=null&&!mfile.isEmpty()) {
 			try {
 				mfile.transferTo(new File(upDir,mfile.getOriginalFilename()));
 			} catch (IllegalStateException e) {
@@ -59,6 +65,7 @@ public class PostReactJpaController {
 				e.printStackTrace();
 			}
 		}
+		*/
 		vo.setFilename(mfile.getOriginalFilename());
 		vo.setName(nickname);
 		//[1] VO를 Entity로 변환한다
@@ -86,6 +93,29 @@ public class PostReactJpaController {
 		}
 	}
 
+	private String storeFile(MultipartFile file) throws Exception {
+        String extension = getFileExtension(file.getOriginalFilename());
+        String filename = UUID.randomUUID().toString() + "." + extension;
+        Path storageDirectory = Paths.get(System.getProperty("user.dir"),"images/uploads");
+        System.out.println("storageDirectory: "+storageDirectory);
+        if (!Files.exists(storageDirectory)) {
+            Files.createDirectories(storageDirectory);
+        }
+        Path destinationPath = storageDirectory.resolve(filename);//파일 절대경로 반환
+        //System.getProperty("user.dir")/images/uploads/filename 을 반환함
+		try{
+        file.transferTo(destinationPath);
+		System.out.println("업로드 성공");
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+        return destinationPath.toString();
+    }
+	
+	private String getFileExtension(String fileName) {
+        return fileName.substring(fileName.lastIndexOf(".") + 1);
+    }
+	
 	@GetMapping(value="/postList", produces="application/json")
 	public Map<String,Object> getPostList(PagingVO pvo, HttpSession ses){
 		//System.out.println("pvo=="+pvo);
