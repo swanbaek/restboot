@@ -95,6 +95,9 @@ public class RefreshTokenService {
         }
         //토큰은 유효해도 db에서 가져온 토큰값과 일치하는지 여부를 체크해서 일시하지 않으면 예외 발생
         savedToken.validateSameToken(refreshToken);//
+//        if(!savedToken.getRefreshToken().equals(refreshToken)) {
+//        	throw new InvalidRefreshTokenException();
+//        }
     }
     
     

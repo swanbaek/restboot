@@ -137,7 +137,7 @@ public class UserReactJpaController {
 						throw new InvalidRefreshTokenException();
 					}
 				}catch(InvalidRefreshTokenException ex) {
-					log.error("InvalidRefreshTokenException ex==={}",ex);
+					log.error("InvalidRefreshTokenException ex===");
 					///새 access토큰과 refresh토큰 발급//////////////////////////
 					// final String token=tokenProvider.create(user);//토큰 만료일 1일(디폴트 1일로 설정함)
 					
@@ -181,6 +181,11 @@ public class UserReactJpaController {
     }
 	}
 
+	/*
+	 * 1. 전달받은 유저의 아이디로 유저가 존재하는지 확인한다. 2. RefreshToken이 유효한지 체크한다. 3. AccessToken을
+	 * 발급하여 기존 RefreshToken과 함께 응답한다.
+	 */
+	
 	// 리액트에서 로그아웃 처리는 localStorage에서 access token을 삭제하는 것으로만 처리하고 별도로 백엔드 요청을 보내지는
 	// 않았음
 	// but 만약 백엔드로 요청을 보낸다면 아래와 같이 처리하면 될 듯===>다시 수정.react에서 api요청을 보내 refreshToken을
@@ -226,14 +231,10 @@ public class UserReactJpaController {
 		// return new ResponseEntity(HttpStatus.OK);
     
 	}
-
-	/*
-	 * 1. 전달받은 유저의 아이디로 유저가 존재하는지 확인한다. 2. RefreshToken이 유효한지 체크한다. 3. AccessToken을
-	 * 발급하여 기존 RefreshToken과 함께 응답한다.
-	 */
+	
 	@PostMapping("/refreshToken")
-	public ResponseEntity<?> requestRefresh(@RequestBody RefreshTokenDTO refreshDto) {
-
+	public ResponseEntity<?> requestRefresh_old(@RequestBody RefreshTokenDTO refreshDto) {
+		log.info("refreshToken요청 들어옴 "+refreshDto.getRefreshToken());
 		RefreshToken rtoken = this.refreshTokenService.findByRefreshToken(refreshDto.getRefreshToken());
 		// db에서 요청에 들어온 refreshToken을 이용해 토큰정보를 가져온다.
 		// 리프레시토큰을 parse하여 해당 토큰이 일치하는지 여부를 파악하자
@@ -251,5 +252,8 @@ public class UserReactJpaController {
 				.refreshToken(refreshDto.getRefreshToken()).userIdx(userIdx).nickname(nickname).build();
 		return ResponseEntity.ok(dto);
 	}
+	
+
+	
 
 }/////////////////////////////////////
