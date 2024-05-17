@@ -12,3 +12,7 @@
 -  클라이언트는 요청을 보낼때 ACCESS_TOKEN을 꺼내 요청 헤더에 Authorization이라는 키값에 "Bearer 토큰값"을 포함하여 서버에 보낸다
 -  요청을 받은 서버쪽에서는 해당 요청을 처리하기 전에 JwtAuthenticationFilter 가  Bearer토큰을 파싱하여
     secret key 서명과 함께 유효한 토큰인지, 위조된 토큰은 아닌지 검증하여 이를 통과하면 로그인한 유저로 처리한다
+
+- ACCESS TOKEN만료시 REFRESH TOKEN 요청을 보내 회원인가를 받는 부분 로직 추가함
+
+- ![image](https://github.com/swanbaek/restboot/assets/20180958/5f82ed12-b314-4e03-9d21-a2c3e44e8a04)
