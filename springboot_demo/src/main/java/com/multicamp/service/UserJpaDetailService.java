@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.multicamp.domain.SecurityReactUser;
 import com.multicamp.domain.UserEntity;
-import com.multicamp.domain.UserVO;
 import com.multicamp.persistence.UserRepository;
 
 import lombok.RequiredArgsConstructor;
