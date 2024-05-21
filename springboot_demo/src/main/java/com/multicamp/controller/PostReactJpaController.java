@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -42,7 +43,16 @@ public class PostReactJpaController {
 	
 	@Inject
 	private PostJpaService postService;
-	
+	/*@AuthenticationPrincipal 어노테이션은 스프링 시큐리티에서 현재 인증된 사용자의 세부 정보를 컨트롤러 메서드에 주입할 때 사용됩니다. 
+	 * =>SecurityContextHolder에서 현재 사용자 정보를 가져와 주입함
+	 * 이 어노테이션을 사용하면 현재 인증된 사용자의 Principal 객체 또는 커스텀 UserDetails 객체를 메서드 파라미터로 직접 주입받을 수 있습니다
+	 * => 이를 통해 인증된 사용자 정보를 쉽게 사용할 수 있다.
+	 * =================================================
+	 * @PreAuthorize 어노테이션을 사용하기 위해서는 스프링 시큐리티 설정에서 메서드 보안을 활성화해야 합니다. 
+	 * 이를 위해 @EnableGlobalMethodSecurity 어노테이션을 사용합니다 ===>@EnableGlobalMethodSecurity(prePostEnabled = true) 컨피그 클래스에 이를 붙여주자.
+	 * 해당 롤을 가진 사용자만 접근 가능하며, 메서드 호출전에 권한을 검사하여 권한제어를 함
+	 * */
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostMapping(value="/postAdd", produces="application/json")
 	public ResponseEntity<?> postCreate(@AuthenticationPrincipal String nickname,
 			@ModelAttribute PostJpaVO vo, HttpSession ses){
@@ -129,6 +139,7 @@ public class PostReactJpaController {
 		map.put("posts", postList);
 		return map;
 	}
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostMapping(value="/postEdit",produces="application/json")
 	public ModelMap updatePost(@AuthenticationPrincipal String nickname, PostJpaVO vo,HttpSession ses) {
 		log.info("updatePost nickname={}",nickname);
@@ -165,6 +176,7 @@ public class PostReactJpaController {
 		}
 	}
 	
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@DeleteMapping(value="/postDelete/{id}", produces="application/json")
 	public ModelMap deletePost(@AuthenticationPrincipal String nickname,@PathVariable("id") Long id) {
 		log.info("delete nickname={}",nickname);
