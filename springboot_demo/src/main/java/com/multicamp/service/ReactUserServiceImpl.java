@@ -8,7 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.multicamp.domain.PagingVO;
-import com.multicamp.domain.ReactUserVO;
+import com.multicamp.dto.ReactUserDTO;
 import com.multicamp.mapper.ReactUserMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class ReactUserServiceImpl implements ReactUserService {
 	@Inject
 	private BCryptPasswordEncoder passwordEncoder;
 	@Override
-	public int createUser(ReactUserVO user) {
+	public int createUser(ReactUserDTO user) {
 		user.setPwd(passwordEncoder.encode(user.getPwd()));
 		return userMapper.createUser(user);
 	}
@@ -35,7 +35,7 @@ public class ReactUserServiceImpl implements ReactUserService {
 	}
 
 	@Override
-	public List<ReactUserVO> listUser(PagingVO pvo) {
+	public List<ReactUserDTO> listUser(PagingVO pvo) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -53,19 +53,19 @@ public class ReactUserServiceImpl implements ReactUserService {
 	}
 
 	@Override
-	public int updateUser(ReactUserVO user) {
+	public int updateUser(ReactUserDTO user) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public ReactUserVO getUser(Integer midx) {
+	public ReactUserDTO getUser(Integer midx) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ReactUserVO findUser(ReactUserVO user) {
+	public ReactUserDTO findUser(ReactUserDTO user) {
 		// TODO Auto-generated method stub
 		return null;
 	}

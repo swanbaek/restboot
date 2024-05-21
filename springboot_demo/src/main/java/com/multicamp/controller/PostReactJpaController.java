@@ -32,8 +32,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.multicamp.domain.PagingVO;
 import com.multicamp.domain.PostEntity;
-import com.multicamp.domain.PostJpaVO;
-import com.multicamp.domain.ResponseVO;
+import com.multicamp.dto.PostJpaDTO;
+import com.multicamp.dto.ResponseDTO;
 import com.multicamp.service.PostJpaService;
 //참고: https://github.com/fsoftwareengineer/todo-application-revision2
 @RequestMapping("/api")
@@ -55,7 +55,7 @@ public class PostReactJpaController {
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostMapping(value="/postAdd", produces="application/json")
 	public ResponseEntity<?> postCreate(@AuthenticationPrincipal String nickname,
-			@ModelAttribute PostJpaVO vo, HttpSession ses){
+			@ModelAttribute PostJpaDTO vo, HttpSession ses){
 		log.info("vo==={}, nickname=={}",vo,nickname);
 		try {
 		//[0] 파일 업로드 처리
@@ -79,7 +79,7 @@ public class PostReactJpaController {
 		vo.setFilename(mfile.getOriginalFilename());
 		vo.setName(nickname);
 		//[1] VO를 Entity로 변환한다
-		PostEntity entity=PostJpaVO.toEntity(vo);
+		PostEntity entity=PostJpaDTO.toEntity(vo);
 		//[2] id를 0으로 초기화한다. 생성 당시에는 id가 없으므로
 		entity.setId(0L);
 		//[3] Authentication Bearer Token을 통해 받은 nickname을 넘긴다
@@ -89,16 +89,16 @@ public class PostReactJpaController {
 		List<PostEntity> postList=this.postService.create(entity);
 		log.info("entity==={}",entity);
 		//[5] java stream을 이용해 엔티티리스트를 PostJpaVO 리스트로 변환하자
-		List<PostJpaVO> vos=postList.stream().map(PostJpaVO::new).collect(Collectors.toList());
+		List<PostJpaDTO> vos=postList.stream().map(PostJpaDTO::new).collect(Collectors.toList());
 		
 		//[6] 변환된 리스트를 이용해 ResponseVO를 초기화한다
-		ResponseVO<PostJpaVO> resVo=ResponseVO.<PostJpaVO>builder().data(vos).build();
+		ResponseDTO<PostJpaDTO> resVo=ResponseDTO.<PostJpaDTO>builder().data(vos).build();
 		//[7] ResponseEntity 반환
 		return ResponseEntity.ok().body(resVo);
 		}catch(Exception e) {
 			//[8] 예외 발생시 응답 처리
 			log.error("error: {} ", e);
-			ResponseVO<PostJpaVO> resVo=ResponseVO.<PostJpaVO>builder().error(e.getMessage()).build();
+			ResponseDTO<PostJpaDTO> resVo=ResponseDTO.<PostJpaDTO>builder().error(e.getMessage()).build();
 			return ResponseEntity.badRequest().body(resVo);
 		}
 	}
@@ -141,7 +141,7 @@ public class PostReactJpaController {
 	}
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostMapping(value="/postEdit",produces="application/json")
-	public ModelMap updatePost(@AuthenticationPrincipal String nickname, PostJpaVO vo,HttpSession ses) {
+	public ModelMap updatePost(@AuthenticationPrincipal String nickname, PostJpaDTO vo,HttpSession ses) {
 		log.info("updatePost nickname={}",nickname);
 		ModelMap map=new ModelMap();
 		try {
@@ -162,7 +162,7 @@ public class PostReactJpaController {
 			vo.setFilename(mfile.getOriginalFilename());
 			vo.setName(nickname);
 		
-		PostEntity entity=PostJpaVO.toEntity(vo);
+		PostEntity entity=PostJpaDTO.toEntity(vo);
 		int n=this.postService.updatePost(entity);
 	
 		String str=(n>0)?"ok":"fail";

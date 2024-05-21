@@ -3,23 +3,23 @@ package com.multicamp.service;
 import java.util.List;
 
 import com.multicamp.domain.PagingVO;
-import com.multicamp.domain.ReactUserVO;
+import com.multicamp.dto.ReactUserDTO;
 
 public interface ReactUserService {
 
-	int createUser(ReactUserVO user);
+	int createUser(ReactUserDTO user);
 
 	int getUserCount(PagingVO pvo);
 
-	List<ReactUserVO> listUser(PagingVO pvo);
+	List<ReactUserDTO> listUser(PagingVO pvo);
 
 	boolean nickCheck(String nickname);
 
 	int deleteUser(Integer midx);
 
-	int updateUser(ReactUserVO user);
+	int updateUser(ReactUserDTO user);
 
-	ReactUserVO getUser(Integer midx);
+	ReactUserDTO getUser(Integer midx);
 	
-	ReactUserVO findUser(ReactUserVO user);
+	ReactUserDTO findUser(ReactUserDTO user);
 }

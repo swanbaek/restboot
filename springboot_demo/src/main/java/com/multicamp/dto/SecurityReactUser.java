@@ -1,9 +1,11 @@
-package com.multicamp.domain;
+package com.multicamp.dto;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
+
+import com.multicamp.domain.UserEntity;
 
 import lombok.Data;
 /*

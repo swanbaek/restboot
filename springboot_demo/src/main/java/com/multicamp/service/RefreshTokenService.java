@@ -32,7 +32,7 @@ refresh token이 만료되었다면 해당 refresh token을 db에서 제거하�
 import org.springframework.transaction.annotation.Transactional;
 
 import com.multicamp.cmm.exception.InvalidRefreshTokenException;
-import com.multicamp.domain.RefreshToken;
+import com.multicamp.domain.RefreshTokenEntity;
 import com.multicamp.persistence.RefreshTokenRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -45,7 +45,7 @@ public class RefreshTokenService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final TokenProvider tokenProvider;
     
-    public RefreshToken findByRefreshToken(String refreshToken) {
+    public RefreshTokenEntity findByRefreshToken(String refreshToken) {
         return refreshTokenRepository.findByRefreshToken(refreshToken)
                 .orElseThrow(() -> new IllegalArgumentException("Unexpected token"));
     }
@@ -55,10 +55,10 @@ public class RefreshTokenService {
      * 따라서, 로그인할 때 마다 해당 멤버가 가진 refresh token을 모두 지워준 후 새로 생성한 refresh token을 저장한다.
      * */
     @Transactional
-    public RefreshToken addRefreshToken(RefreshToken entity) {
+    public RefreshTokenEntity addRefreshToken(RefreshTokenEntity entity) {
     	
     	//기존 리프레시토큰 지워주는 로직 들어가야 함/////////////
-    	Optional<RefreshToken> dbrtk=this.refreshTokenRepository.findByUserIdx(entity.getUserIdx());
+    	Optional<RefreshTokenEntity> dbrtk=this.refreshTokenRepository.findByUserIdx(entity.getUserIdx());
     	log.info("dbrtk isPresent==={}",dbrtk.isPresent());
     	
     	if(dbrtk.isPresent()) {
@@ -83,7 +83,7 @@ public class RefreshTokenService {
     }
     @Transactional
     public void matches(String refreshToken, Long userIdx) {
-        RefreshToken savedToken = refreshTokenRepository.findByUserIdx(userIdx)        		
+        RefreshTokenEntity savedToken = refreshTokenRepository.findByUserIdx(userIdx)        		
                 .orElseThrow(InvalidRefreshTokenException::new);
         log.info("matches() db에 저장된 savedRefreshToken={}", savedToken.getRefreshToken());
         log.info("matches() refreshToken={}", refreshToken);

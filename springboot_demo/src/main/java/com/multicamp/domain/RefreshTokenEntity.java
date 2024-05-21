@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 sequenceName = "refresh_token_SEQ", //시퀀스명
 initialValue = 1, //시작값
 allocationSize = 1)//메모리 통해 할당할 범위 사이즈
-public class RefreshToken {
+public class RefreshTokenEntity {
 	
 	@Id
     
@@ -42,7 +42,7 @@ public class RefreshToken {
     @Column(name = "expirydate", nullable = false)
     private Date expiryDate;
 
-    public RefreshToken(Long userIdx, String refreshToken, Duration expiry) {
+    public RefreshTokenEntity(Long userIdx, String refreshToken, Duration expiry) {
     	
         this.userIdx = userIdx;
         this.refreshToken = refreshToken;
@@ -58,7 +58,7 @@ public class RefreshToken {
         this.expiryDate=new Date(time);
     }
 	*/
-    public RefreshToken update(RefreshToken newRefreshToken) {
+    public RefreshTokenEntity update(RefreshTokenEntity newRefreshToken) {
         this.refreshToken = newRefreshToken.refreshToken;
         this.id=newRefreshToken.id;
         this.expiryDate=newRefreshToken.expiryDate;

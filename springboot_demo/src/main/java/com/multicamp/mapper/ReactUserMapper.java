@@ -1,16 +1,16 @@
 package com.multicamp.mapper;
 
-import com.multicamp.domain.ReactUserVO;
+import com.multicamp.dto.ReactUserDTO;
 
 public interface ReactUserMapper {
 	
-	int createUser(ReactUserVO user);
-	ReactUserVO getUser(int idx);
+	int createUser(ReactUserDTO user);
+	ReactUserDTO getUser(int idx);
 	
 	Integer idCheck(String userid);
-	ReactUserVO findUser(ReactUserVO user);
+	ReactUserDTO findUser(ReactUserDTO user);
 	
 	int deleteUser(int idx);
-	int updateUser(ReactUserVO user);
+	int updateUser(ReactUserDTO user);
 
 }

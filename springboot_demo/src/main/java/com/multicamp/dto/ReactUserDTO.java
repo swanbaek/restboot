@@ -1,4 +1,4 @@
-package com.multicamp.domain;
+package com.multicamp.dto;
 
 import java.sql.Date;
 
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReactUserVO {
+public class ReactUserDTO {
 	private String token;//token추가
 	private String refreshToken;//refreshToken추가
 	

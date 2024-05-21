@@ -1,4 +1,4 @@
-package com.multicamp.domain;
+package com.multicamp.dto;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ResponseVO<T> {
+public class ResponseDTO<T> {
 	
 	private String error;
 	private List<T> data;

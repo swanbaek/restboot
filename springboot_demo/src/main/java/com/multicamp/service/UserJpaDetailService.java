@@ -5,8 +5,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.multicamp.domain.SecurityReactUser;
 import com.multicamp.domain.UserEntity;
+import com.multicamp.dto.SecurityReactUser;
 import com.multicamp.persistence.UserRepository;
 
 import lombok.RequiredArgsConstructor;

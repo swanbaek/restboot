@@ -1,8 +1,10 @@
-package com.multicamp.domain;
+package com.multicamp.dto;
 
 import java.util.Date;
 
 import org.springframework.web.multipart.MultipartFile;
+
+import com.multicamp.domain.PostEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostJpaVO {
+public class PostJpaDTO {
 	
 	private Long id;
 	private String name;
@@ -22,7 +24,7 @@ public class PostJpaVO {
 	private Date wdate;
 	private MultipartFile mfilename;
 	
-	public PostJpaVO(final PostEntity entity) {
+	public PostJpaDTO(final PostEntity entity) {
 		this.id=entity.getId();
 		this.name=entity.getName();
 		this.content=entity.getContent();
@@ -30,7 +32,7 @@ public class PostJpaVO {
 		this.wdate=entity.getWdate();
 	}
 	
-	public static PostEntity toEntity(final PostJpaVO vo) {
+	public static PostEntity toEntity(final PostJpaDTO vo) {
 		return PostEntity.builder()
 				.id(vo.getId())
 				.name(vo.name)

@@ -21,12 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.net.HttpHeaders;
 import com.multicamp.cmm.exception.InvalidRefreshTokenException;
-import com.multicamp.domain.ReactUserVO;
-import com.multicamp.domain.RefreshToken;
-import com.multicamp.domain.ResponseVO;
+import com.multicamp.domain.RefreshTokenEntity;
 import com.multicamp.domain.UserEntity;
+import com.multicamp.dto.ReactUserDTO;
 import com.multicamp.dto.ReactUserResponseDTO;
 import com.multicamp.dto.RefreshTokenDTO;
+import com.multicamp.dto.ResponseDTO;
 import com.multicamp.service.RefreshTokenService;
 import com.multicamp.service.TokenProvider;
 import com.multicamp.service.UserJpaService;
@@ -53,7 +53,7 @@ public class UserReactJpaController {
 	private TokenProvider tokenProvider;
 
 	@PostMapping(value = "/join")
-	public ResponseEntity<?> joinProcess(@RequestBody ReactUserVO userVo) {
+	public ResponseEntity<?> joinProcess(@RequestBody ReactUserDTO userVo) {
 
 		log.info("userVo=={}", userVo);
 		try {
@@ -70,14 +70,14 @@ public class UserReactJpaController {
 
 			// 서비스를 이용해 리포지터리에 유저 저장
 			UserEntity registeredUser = userService.create(user);
-			ReactUserVO responseUserVo = ReactUserVO.builder().idx(registeredUser.getIdx())
+			ReactUserDTO responseUserVo = ReactUserDTO.builder().idx(registeredUser.getIdx())
 					.name(registeredUser.getName()).nickname(registeredUser.getNickname()).build();
 
 			return ResponseEntity.ok().body(responseUserVo);
 
 		} catch (Exception e) {
 			// TODO: handle exception
-			ResponseVO resVo = ResponseVO.builder().error(e.getMessage()).build();
+			ResponseDTO resVo = ResponseDTO.builder().error(e.getMessage()).build();
 			log.error("error={} ", e.getMessage());
 			return ResponseEntity.badRequest().body(resVo);
 		}
@@ -92,7 +92,7 @@ public class UserReactJpaController {
 	 */
 
 	@PostMapping("/login")
-	public ResponseEntity<?> authenticate(@RequestBody ReactUserVO userVo, HttpServletRequest req,
+	public ResponseEntity<?> authenticate(@RequestBody ReactUserDTO userVo, HttpServletRequest req,
 			HttpServletResponse res) {
 		log.info("userVo={}", userVo);
 		try {
@@ -151,7 +151,7 @@ public class UserReactJpaController {
 					final String refreshToken = tokenProvider.createRefreshToken(user, expiry);// refresh토큰 만료 1일 뒤로 설정
 					////////////////////////////////
 					// refreshToken db에 저장(일련번호, 회원idx, 토큰값, 만기시간[밀리초])
-					RefreshToken rEntity = new RefreshToken(user.getIdx(), refreshToken, expiry);
+					RefreshTokenEntity rEntity = new RefreshTokenEntity(user.getIdx(), refreshToken, expiry);
 					refreshTokenService.addRefreshToken(rEntity);
 					log.info("refreshToken테이블에 저장");
 					/*
@@ -176,11 +176,11 @@ public class UserReactJpaController {
 			}
 		}
 		//인증받지 못한 경우=> user 가 null인 경우
-		ResponseVO resErrVo = ResponseVO.builder().error("Login Failed").build();
+		ResponseDTO resErrVo = ResponseDTO.builder().error("Login Failed").build();
 		return ResponseEntity.badRequest().body(resErrVo);
 	} catch (Exception e) {
         log.error("Error during authentication", e);
-        ResponseVO resErrVo = ResponseVO.builder().error("Internal Server Error").build();
+        ResponseDTO resErrVo = ResponseDTO.builder().error("Internal Server Error").build();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(resErrVo);
     }
 	}
@@ -215,7 +215,7 @@ public class UserReactJpaController {
 
 		                } catch (Exception e) {
 		                    log.error("Error deleting refreshToken", e);
-		                    ResponseVO resErrVo = ResponseVO.builder().error("Error during logout").build();
+		                    ResponseDTO resErrVo = ResponseDTO.builder().error("Error during logout").build();
 		                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(resErrVo);
 		                }
 				}//if-------------
@@ -230,7 +230,7 @@ public class UserReactJpaController {
 		// 있다.
 		new SecurityContextLogoutHandler().logout(request, response,
 				SecurityContextHolder.getContext().getAuthentication());
-		ResponseVO resVo = ResponseVO.builder().data(Arrays.asList("Logout Success")).build();
+		ResponseDTO resVo = ResponseDTO.builder().data(Arrays.asList("Logout Success")).build();
 		return ResponseEntity.ok(resVo);
 		// return new ResponseEntity(HttpStatus.OK);
     
@@ -239,7 +239,7 @@ public class UserReactJpaController {
 	@PostMapping("/refreshToken")
 	public ResponseEntity<?> requestRefresh_old(@RequestBody RefreshTokenDTO refreshDto) {
 		log.info("refreshToken요청 들어옴 "+refreshDto.getRefreshToken());
-		RefreshToken rtoken = this.refreshTokenService.findByRefreshToken(refreshDto.getRefreshToken());
+		RefreshTokenEntity rtoken = this.refreshTokenService.findByRefreshToken(refreshDto.getRefreshToken());
 		// db에서 요청에 들어온 refreshToken을 이용해 토큰정보를 가져온다.
 		// 리프레시토큰을 parse하여 해당 토큰이 일치하는지 여부를 파악하자
 		log.info("rtoken=={}: ", rtoken);
