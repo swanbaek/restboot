@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,6 +40,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/api")
 @Slf4j
+
 public class UserReactJpaController {
 	//log log = logFactory.getlog(getClass());
 	@Inject
@@ -118,6 +120,7 @@ public class UserReactJpaController {
 					for(Cookie ck:cks) {
 						if(ck.getName().equals("refreshToken")) {
 							existingRefreshToken=ck.getValue();
+							log.info("쿠키 existingRefreshToken: "+existingRefreshToken);
 						}
 					}
 				}
@@ -126,7 +129,7 @@ public class UserReactJpaController {
 					if(existingRefreshToken!=null) {
 					refreshTokenService.matches(existingRefreshToken, user.getIdx());
 					log.info("쿠키에서 가져온 기존 refreshToken 유효함************");
-					final String token = tokenProvider.createToken(user, Duration.ofHours(1));// 토큰 만료 1시간 뒤로 설정
+					final String token = tokenProvider.createToken(user, Duration.ofMinutes(1));// 토큰 만료 1분 뒤로 설정 (테스트 위해. 나중에 1시간으로 변경하자)
 					log.info("새 accessToken발급*********");
 					
 					final ReactUserResponseDTO resVo = ReactUserResponseDTO.builder().accessToken(token)
@@ -141,7 +144,7 @@ public class UserReactJpaController {
 					///새 access토큰과 refresh토큰 발급//////////////////////////
 					// final String token=tokenProvider.create(user);//토큰 만료일 1일(디폴트 1일로 설정함)
 					
-					final String token = tokenProvider.createToken(user, Duration.ofHours(1));// 토큰 만료 1시간 뒤로 설정
+					final String token = tokenProvider.createToken(user, Duration.ofMinutes(1));// 토큰 만료 1시간 뒤로 설정
 					log.info("1. 새 accessToken을 발급하는 경우: {}", token);
 					// refresh token도 발급
 					Duration expiry = Duration.ofDays(1);//
@@ -160,9 +163,10 @@ public class UserReactJpaController {
 					// accessToken은 response 응답데이터에 포함하여 보내면=> 리액트에서 이를 받아 요청 보낼때 헤더에 포함시켜 전송한다
 					Cookie ck = new Cookie("refreshToken", refreshToken);
 					ck.setMaxAge((int)Duration.ofDays(1).toSeconds());//쿠키 유효시간은 밀리초가 아닌 초단위로 설정
-					ck.setPath("/");
-					ck.setHttpOnly(true);//쿠키의 보안 속성 (예: HttpOnly, Secure)을 설정하여 보안을 강화
-					ck.setSecure(true);
+					//ck.setPath("/");
+					//ck.setHttpOnly(true);//쿠키의 보안 속성 (예: HttpOnly, Secure)을 설정하여 보안을 강화
+					/*HttpOnly와 Secure 속성이 설정되어 있는 경우, 브라우저의 제한 때문에 JavaScript로 쿠키를 읽을 수 없습니다. HttpOnly 쿠키는 서버에서만 접근 가능하므로 JavaScript로 접근할 수 없습니다*/
+					//ck.setSecure(true);
 					res.addCookie(ck);
 	
 					final ReactUserResponseDTO resVo = ReactUserResponseDTO.builder().accessToken(token)
@@ -205,8 +209,8 @@ public class UserReactJpaController {
 		                    Cookie deleteCookie = new Cookie("refreshToken", null);
 		                    deleteCookie.setMaxAge(0);
 		                    deleteCookie.setPath("/");
-		                    deleteCookie.setHttpOnly(true);
-		                    deleteCookie.setSecure(true);
+		                  //  deleteCookie.setHttpOnly(true);
+		                   // deleteCookie.setSecure(true);
 		                    response.addCookie(deleteCookie);
 
 		                } catch (Exception e) {

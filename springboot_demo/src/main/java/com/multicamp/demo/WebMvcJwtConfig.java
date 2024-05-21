@@ -40,7 +40,7 @@ public class WebMvcJwtConfig {
 				.anyRequest().authenticated().and().formLogin()
 				.disable()
 				// .logout().invalidateHttpSession(true)
-				// .logoutSuccessUrl("/login")
+				// .logoutSuccessUrl("/login")				
 				.csrf().disable().httpBasic().disable()// token을 사용하므로 basic인증 비활성화
 				.sessionManagement()// session기반이 아님을 선언
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().build();

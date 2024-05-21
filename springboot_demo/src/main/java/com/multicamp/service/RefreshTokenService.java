@@ -85,7 +85,7 @@ public class RefreshTokenService {
     public void matches(String refreshToken, Long userIdx) {
         RefreshToken savedToken = refreshTokenRepository.findByUserIdx(userIdx)        		
                 .orElseThrow(InvalidRefreshTokenException::new);
-        log.info("matches() db에 저장된 savedRefreshToken={}", savedToken);
+        log.info("matches() db에 저장된 savedRefreshToken={}", savedToken.getRefreshToken());
         log.info("matches() refreshToken={}", refreshToken);
         //유효한 토큰이 아니라면 db에서 회원의 idx로 기존 토큰을 삭제하고 예외 발생
         if (!tokenProvider.validToken(savedToken.getRefreshToken())) {
