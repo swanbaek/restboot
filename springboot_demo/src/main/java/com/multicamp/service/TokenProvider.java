@@ -81,7 +81,7 @@ public class TokenProvider {
 	 */
 
 	public String validateAndGetUserId(String token) {
-
+		
 		Claims claims = Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJws(token)// 토큰을 디코딩 및 파싱함
 				.getBody();
 		return claims.getSubject();//닉네임 반환

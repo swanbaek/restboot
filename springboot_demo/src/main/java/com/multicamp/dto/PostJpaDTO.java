@@ -20,7 +20,7 @@ public class PostJpaDTO {
 	private Long id;
 	private String name;
 	private String content;
-	private String filename;
+	private String filename; 
 	private Date wdate;
 	private MultipartFile mfilename;
 	
